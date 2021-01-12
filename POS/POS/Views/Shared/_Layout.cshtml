@@ -1,49 +1,123 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - POS</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/layout/css/all.min.css">
+    <link rel="stylesheet" href="~/layout/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/layout/css/nice-select.css">
+    <link href="~/layout/css/style.css" rel="stylesheet" />
+    <style>
+    </style>
+    @RenderSection("CSS", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">POS</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="collapses navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto font-weight-bold" style="flex-direction: row;">
+                <li class="nav-item active px-4 text-gradient m-auto">
+                    <a class="nav-link text-reset text-center" href="~/Order/Index">MAKE ORDERS <span class="sr-only">(current)</span></a>
+                </li>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <li class="nav-item px-4 text-gradient m-auto">
+                        <a class="nav-link text-reset text-center" href="~/Holds/Index">HOLD</a>
+                    </li>
+                }
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("CustomerService"))
+                {
+                    <li class="nav-item px-4 text-gradient m-auto">
+                        <a class="nav-link text-reset text-center" href="~/Holds/Index">HOLD</a>
+                    </li>
+                }
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Branch"))
+                {
+                    <li class="nav-item px-4 text-gradient m-auto">
+                        <a class="nav-link text-reset text-center" href="~/Holds/Edithold">Edit Hold</a>
+                    </li>
+                }
+                <li class="nav-item px-4 text-gradient m-auto">
+                    <a class="nav-link text-reset text-center" href="~/DailyOrder/Index">DAILY ORDERS</a>
+                </li>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <li class="nav-item px-4 text-gradient m-auto dropdown" id="dropdownMenu">
+                        <a class="nav-link dropdown-toggle text-reset" href="#" id="navbarDropdown"
+                           role="button" data-toggle="dropdown">
+                            Order controls <i class="fas fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-menu" id="dropdownControls" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item text-gradient" href="~/Meals/Create">Create Meal</a>
+                            <a class="dropdown-item text-gradient" href="~/Meals/Createsize">Create Meal Size</a>
+                            <a class="dropdown-item text-gradient" href="~/Customers/Create">Create Customer</a>
+                            <a class="dropdown-item text-gradient" href="~/Branches/Create">Create Branch</a>
+                            <a class="dropdown-item text-gradient" href="~/Categories/Create">Create Category</a>
+                            <a class="dropdown-item text-gradient" href="~/Addresses/Create">Add Customer Address</a>
+                            <a class="dropdown-item text-gradient" href="~/Zoon/Create">Add Area</a>
+                        </div>
+                    </li>
+
+                }
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                {
+                    <li class="nav-item px-4 text-gradient m-auto">
+                        <a class="nav-link text-reset text-center" href="~/Account/Register">Add User</a>
+                    </li>
+                }
+                <partial name="_LoginPartial" />
+
+                <li class="nav-item px-4 text-gradient m-auto dropdown" id="dropNoti">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle text-reset text-center" data-toggle="dropdown" href="#" id="notification" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="far fa-bell"></i>
+                            <span class="text-gradient" style="position: relative; bottom: 6px;" id="ordersNumber">0</span>
+                        </a>
+                        <ul class="dropdown-menu notfy px-4" style="color:#F97F46;overflow:scroll;overflow-x:hidden;height:150px" role="menu" aria-labelledby="menu1">
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    @RenderBody()
+
 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - POS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/layout/js/jquery-3.5.1.min.js"></script>
+    <script src="~/layout/js/popper.min.js"></script>
+    <script src="~/layout/js/bootstrap.min.js"></script>
+    <script src="~/layout/js/jquery.nice-select.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/layout/js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            var down = false;
+            $('#bell').click(function (e) {
+                var color = $(this).text();
+                if (down) {
+                    $('#box').css('height', '0px');
+                    $('#box').css('opacity', '0');
+                    down = false;
+                } else {
+                    $('#box').css('height', 'auto');
+                    $('#box').css('opacity', '1');
+                    down = true;
+                }
+            });
+
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

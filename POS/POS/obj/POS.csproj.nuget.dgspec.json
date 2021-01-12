@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\work\\POS\\POS\\POS\\POS.csproj": {}
+    "E:\\work\\POS-Lowcalories\\POS\\POS\\POS.csproj": {}
   },
   "projects": {
-    "E:\\work\\POS\\POS\\POS\\POS.csproj": {
+    "E:\\work\\POS-Lowcalories\\POS\\POS\\POS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\work\\POS\\POS\\POS\\POS.csproj",
+        "projectUniqueName": "E:\\work\\POS-Lowcalories\\POS\\POS\\POS.csproj",
         "projectName": "POS",
-        "projectPath": "E:\\work\\POS\\POS\\POS\\POS.csproj",
-        "packagesPath": "C:\\Users\\Nabil Helmy\\.nuget\\packages\\",
-        "outputPath": "E:\\work\\POS\\POS\\POS\\obj\\",
+        "projectPath": "E:\\work\\POS-Lowcalories\\POS\\POS\\POS.csproj",
+        "packagesPath": "C:\\Users\\JC.TECH\\.nuget\\packages\\",
+        "outputPath": "E:\\work\\POS-Lowcalories\\POS\\POS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\Nabil Helmy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\JC.TECH\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 20.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -58,13 +58,31 @@
               "target": "Package",
               "version": "[3.1.8, )"
             },
+            "Microsoft.AspNetCore.SignalR": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            },
+            "Microsoft.AspNetCore.SignalR.Core": {
+              "target": "Package",
+              "version": "[1.1.0, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[3.1.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[3.1.10, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[3.1.10, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.1.4, )"
             }
           },
           "imports": [

@@ -1,0 +1,142 @@
+/* General */
+.border-gradient{
+    border: 1px solid #F97F46;
+    /* border-image-source:linear-gradient(180deg,#F97F46 0,#F74972);
+    border-image-slice: 1 ; */
+}
+
+.bg-gradient{
+    background: linear-gradient(180deg,#F97F46 0,#F74972);
+}
+
+.text-gradient{
+    background: linear-gradient(180deg,#F97F46 0,#F74972);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.radius{
+    border-radius: 14px;
+}
+
+.radius-top-left{
+    border-top-left-radius: 14px;
+}
+
+.bg-mine{
+    background-color: #F5F5F5;
+}
+
+/* general end */
+
+/* table style */
+
+@media all and (min-width: 901px) {
+
+    #user-table table th,td{
+    border: 0px !important;
+    font-size: 14px;
+    }
+
+    #user-table table th{
+        background: linear-gradient(180deg,#F97F46 0,#F74972);
+    }
+    
+    #user-table table th:first-child{
+        border-top-left-radius: 14px;
+        border-bottom-left-radius: 14px;
+    }
+
+    #user-table table th:last-child{
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
+
+    #user-table table tbody tr td{
+        background-color: white;
+    }
+
+    #user-table table tr:first-child td:first-child{
+        border-top-left-radius: 14px;
+    }
+
+    #user-table table tr:first-child td:last-child{
+        border-top-right-radius: 14px;
+    }
+
+    #user-table table tr:last-child td:last-child{
+        border-bottom-right-radius: 14px;
+    }
+
+    #user-table table tr:last-child td:first-child{
+        border-bottom-left-radius: 14px;
+    }
+
+    #user-table table tbody:before {
+        content: ".";
+        display: block;
+        line-height: 2em;
+        color: transparent;
+    }
+
+    #user-table table tbody tr td{
+        padding: 25px 0px;
+    }
+}
+
+/* responsive table */
+
+@media screen and (max-width: 900px) {
+
+    #user-table table th,td{
+        border: 0px !important;
+        }
+    
+    table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+  
+    table tr {
+      display: block;
+      margin-bottom: .625em;
+      background-color: white;
+      border-radius: 14px;
+      border: rgb(226, 226, 226) 1px solid;
+    }
+    
+    table td {
+      display: block;
+      font-size: .8em;
+      text-align: right;
+      border-bottom: 1px solid #ddd !important;
+
+    }
+    
+    table td::before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      padding-right: 50px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg,#F97F46 0,#F74972);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    table td:last-child {
+      border-bottom: 0 !important;
+    }
+  }

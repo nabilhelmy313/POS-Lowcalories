@@ -1,0 +1,32 @@
+﻿@model POS.Data.Category
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section id="createCategory">
+    <div class="container py-3">
+        <h2 class="text-gradient h1 py-1">Create Category</h2>
+        <hr>
+        <form asp-action="Create" class="row mx-2">
+
+
+            <div class="col-12">
+                <label class="text-gradient font-weight-bold">Category Name</label>
+                <input asp-for="Name" type="text" class="form-control">
+            </div>
+
+
+            <button class="btn btn-block bg-gradient text-white mt-3" type="submit">Create</button>
+        </form>
+    </div>
+</section>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

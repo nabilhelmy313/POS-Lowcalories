@@ -1,0 +1,74 @@
+﻿@model POS.ViewModel.EditHoldViewModel
+
+@{
+    ViewData["Title"] = "makeTime";
+}
+
+<h1>makeTime</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4 container">
+        <form asp-action="makeTime">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CookingTime" class="control-label"></label>
+                <input asp-for="CookingTime" class="form-control" />
+                <span asp-validation-for="CookingTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiliveryTime" class="control-label"></label>
+                <input asp-for="DiliveryTime" class="form-control" />
+                <span asp-validation-for="DiliveryTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary savetime" />
+            </div>
+        </form>
+        <div class="notification"></div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/signalr.js/jquery.signalR.js"></script>
+    <script>
+        function getNotification() {
+            debugger;
+            $.ajax({
+                
+                url: "/Holds/getNotification",
+                method: "GET",
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        $(".savetime").click(function () {
+            getNotification();
+        });
+        let connection = new signalR.HubConnectionBuilder().withUrl("/NotificationHub").build();
+
+        connection.on("NewOrder", () => {
+            getNotification()
+        })
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+}

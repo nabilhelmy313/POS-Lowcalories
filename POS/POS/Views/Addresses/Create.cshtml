@@ -1,0 +1,91 @@
+﻿@model AddAddressViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<section id="createCustomer">
+    <div class="container py-3">
+        <h2 class="text-gradient h1 py-1">Add Address</h2>
+        <hr>
+        <form asp-action="Create" enctype="multipart/form-data" class="row mx-2">
+            <div class="col-9">
+                <label class="text-gradient font-weight-bold ">Customer Phone</label>
+                <input asp-for="CustPhone" type="text" id="custsearch" class="form-control border-gradient d-inline-block w-50 radius py-4" placeholder="customer number">
+                <span asp-validation-for="CustPhone" class="text-danger mt-1"></span>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn bg-gradient text-white radius m-2 custsearch" style="padding: 12px; vertical-align:0;">search customer</button>
+            </div>
+            <div class="col-12" id="custinfo">
+
+            </div>
+            <div class="col-12">
+                <label class="text-gradient font-weight-bold">AREA</label>
+                <select class="form-control gradient2" asp-for="Address.Zoon.Id" asp-items="@(new SelectList(Model.Zoons,"Id","Name"))">
+                </select>
+            </div>
+
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">Street</label>
+                <input asp-for="Street" type="text" class="form-control">
+                <span asp-validation-for="Street" class="text-danger mt-1"></span>
+            </div>
+
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">Floor</label>
+                <input asp-for="Floor" type="text" class="form-control">
+                <span asp-validation-for="Floor" class="text-danger mt-1"></span>
+
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">Flat</label>
+                <input asp-for="Flat" type="text" class="form-control">
+                <span asp-validation-for="Flat" class="text-danger mt-1"></span>
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">Landmark</label>
+                <input asp-for="Landmark" type="text" class="form-control">
+            </div>
+            <button class="btn btn-block bg-gradient text-white mt-3">Create</button>
+        </form>
+    </div>
+</section>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    //customer serch
+    $(".custsearch").click(function () {
+        if (!$("#custsearch").val()) {
+            var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
+                                                 style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                  <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                   style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                    <span class="text-white">ERROR</span>
+                                                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                                  </div>
+                                                  <div class="card-body">
+                                                    <p class="text-white">PLEASE Enter Phone Number</p>
+                                                  </div>
+                                                </div>`;
+            $("#Error").append(x);
+            return;
+        }
+        var phone1 = $("#custsearch").val();
+        var phone2 = $('#custsearch').val();
+        var url = "/Addresses/GetCustomer";
+        $("#custinfo").empty();
+        $.getJSON(url, { phone1: phone1, phone2: phone2 }, function (data) {
+            $("#custinfo").html(data);
+        });
+        
+    });
+</script>
+}

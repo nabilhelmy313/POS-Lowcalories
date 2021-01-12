@@ -1,0 +1,9 @@
+﻿@model Order
+
+<form asp-action="CancelOrder" method="post">
+    <h1>ARE YOU SURE TO CANCEL ORDER <label asp-for="Id"># @Model.Id</label></h1>
+    <button class="btn btn-outline-danger" type="submit">
+        CANCEL ORDER
+    </button>
+    <button class="btn btn-dark" asp-action="Index">BACK TO HOLD</button>
+</form>

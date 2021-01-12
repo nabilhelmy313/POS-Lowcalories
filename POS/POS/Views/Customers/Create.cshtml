@@ -1,0 +1,86 @@
+﻿@model AddCustomerVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section id="createCustomer">
+    <div class="container py-3">
+        <h2 class="text-gradient h1 py-1">Create Customer</h2>
+        <hr>
+        <form asp-action="Create" enctype="multipart/form-data" class="row mx-2">
+
+
+            <div class="col-12">
+                <label class="text-gradient font-weight-bold">User Name</label>
+                <input asp-for="Name" type="text" class="form-control">
+                <span asp-validation-for="Name" class="text-danger mt-1"></span>
+            </div>
+
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">PHONE</label>
+                <input asp-for="Phone1" type="text" class="form-control">
+                <span asp-validation-for="Phone1" class="text-danger mt-1"></span>
+
+            </div>
+
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold"> ANOTHR PHONE</label>
+                <input asp-for="Phone2" type="text" class="form-control">
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">STREET</label>
+                <input asp-for="Street" type="text" class="form-control">
+                <span asp-validation-for="Street" class="text-danger mt-1"></span>
+
+            </div>
+
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">FLOOR</label>
+                <input asp-for="Floor" type="text" class="form-control">
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">FLAT</label>
+                <input asp-for="Flat" type="text" class="form-control">
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">LANDMARK</label>
+                <input asp-for="Landmark" type="text" class="form-control">
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">AREA</label>
+                <select asp-for="ZoonId" class="form-control  text-gradient2" asp-items="@(new SelectList(Model.Zoons,"Id","Name"))"></select>
+            </div>
+            <div class="col-6">
+                <label class="text-gradient font-weight-bold">Note</label>
+                <input asp-for="Note" type="text" class="form-control">
+            </div>
+
+
+            <div class="col-12">
+                <label asp-for="Photo"class="text-gradient font-weight-bold"></label>
+                    <div class="custom-file">
+                        <input asp-for="Photo" class="form-control custom-file-input">
+                        <label asp-for="Photo" class="custom-file-label">Choose File...</label>
+                    </div>
+            </div>
+
+            <button class="btn btn-block bg-gradient text-white mt-3">Create</button>
+        </form>
+    </div>
+</section>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        });
+    </script>
+}

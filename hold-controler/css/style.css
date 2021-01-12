@@ -1,0 +1,161 @@
+/* General */
+.border-gradient{
+    border: 1px solid #F97F46;
+    /* border-image-source:linear-gradient(180deg,#F97F46 0,#F74972);
+    border-image-slice: 1 ; */
+}
+
+.bg-gradient{
+    background: linear-gradient(180deg,#F97F46 0,#F74972);
+}
+
+.text-gradient{
+    background: linear-gradient(180deg,#F97F46 0,#F74972);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.radius{
+    border-radius: 14px;
+}
+
+.radius-top-left{
+    border-top-left-radius: 14px;
+}
+
+.bg-mine{
+    background-color: #F5F5F5;
+}
+
+/* general end */
+
+/* table style */
+
+@media all and (min-width: 992px) {
+
+    #userTable2 table th,td{
+    border: 0px !important;
+    font-size: 14px;
+    }
+
+    #userTable2 table th{
+        background: linear-gradient(180deg,#F97F46 0,#F74972);
+    }
+    
+    #userTable2 table th:first-child{
+        border-top-left-radius: 14px;
+        border-bottom-left-radius: 14px;
+    }
+
+    #userTable2 table th:last-child{
+        border-top-right-radius: 14px;
+        border-bottom-right-radius: 14px;
+    }
+
+    #userTable2 table tbody tr td{
+        background-color: white;
+    }
+
+    #userTable2 table tr:first-child td:first-child{
+        border-top-left-radius: 14px;
+    }
+
+    #userTable2 table tr:first-child td:last-child{
+        border-top-right-radius: 14px;
+    }
+
+    #userTable2 table tr:last-child td:last-child{
+        border-bottom-right-radius: 14px;
+    }
+
+    #userTable2 table tr:last-child td:first-child{
+        border-bottom-left-radius: 14px;
+    }
+
+    #userTable2 table tbody:before {
+        content: ".";
+        display: block;
+        line-height: 2em;
+        color: transparent;
+    }
+
+    #userTable2 table tbody tr td:last-child{
+        padding: 10px 0px;
+    }
+}
+
+/* responsive table */
+
+@media screen and (max-width: 991px) {
+
+    #userTable2 table th,td{
+        border: 0px !important;
+        }
+    
+    table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+  
+    table tr {
+      display: block;
+      margin-bottom: .625em;
+      background-color: white;
+      border-radius: 14px;
+      border: rgb(226, 226, 226) 1px solid;
+    }
+    
+    table td {
+      display: block;
+      font-size: .8em;
+      text-align: right;
+      border-bottom: 1px solid #ddd !important;
+
+    }
+    
+    table td::before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      padding-right: 50px;
+      text-transform: uppercase;
+      background: linear-gradient(180deg,#F97F46 0,#F74972);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    table td:last-child {
+      border-bottom: 0 !important;
+    }
+
+    table td:last-child::before {
+        padding-top: 10px;
+      }
+
+  }
+
+
+table thead th{
+    width: 5%;
+}
+
+table thead th:nth-child(6){
+    width: 8%;
+}
+table thead th:nth-child(5){
+    width: 8%;
+}
+
+

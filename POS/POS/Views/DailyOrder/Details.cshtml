@@ -1,0 +1,47 @@
+﻿@model List<OrderDetail>
+
+<section id="user-table">
+    <div class="container pb-5">
+        <table class="table text-center">
+            <thead class="text-white">
+                <tr>
+                    <th>Name</th>
+
+                    <th>Size</th>
+                    <th>QTTY</th>
+                    <th>UnitPrice</th>
+                    <th>TOTAL PRICE</th>
+                </tr>
+            </thead>
+            <tbody class="text-muted">
+
+                @foreach (var item in Model)
+                {
+                    if (item.Meal.IsChild == false)
+                    {
+                        <tr>
+                            <td data-label="Order Number">@item.Meal.Name</td>
+                            <td data-label="Order Service">----</td>
+                            <td data-label="Order Type">@item.Quantity</td>
+                            <td data-label="Order date">@item.UnitPrice</td>
+                            <td data-label="Order Net">@(item.Quantity* item.UnitPrice)</td>
+                        </tr>
+                    }
+                    if (item.Meal.IsChild == true)
+                    {
+                       
+                        <tr>
+                            <td data-label="Order Number"></td>
+                            <td data-label="Order Service">@item.Meal.Name</td>
+                            <td data-label="Order Type">@item.Quantity</td>
+                            <td data-label="Order date">@item.UnitPrice</td>
+                            <td data-label="Order Net">@(item.Quantity* item.UnitPrice)</td>
+                        </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</section>

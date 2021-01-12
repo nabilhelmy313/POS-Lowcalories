@@ -1,0 +1,236 @@
+<html>
+    <head>
+
+      <link rel="stylesheet" href="css/all.min.css">
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <link rel="stylesheet" href="css/style.css">
+
+    </head>
+    <body class="bg-mine">   
+      <!-- nav bar  -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><img src="assets/logo.png" alt="logo" class="img-fluid w-50"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav m-auto font-weight-bold" >
+            <li class="nav-item active px-4 text-gradient m-auto">
+              <a class="nav-link text-reset text-center" href="#">MAKE ORDERS <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item px-4 text-gradient m-auto">
+              <a class="nav-link text-reset text-center" href="#">HOLD</a>
+            </li>
+            <li class="nav-item px-4 text-gradient m-auto">
+              <a class="nav-link text-reset text-center" href="#">DAILY ORDERS</a>
+            </li>
+            <li class="nav-item px-4 text-gradient m-auto">
+              <a class="nav-link text-reset text-center" href="#">LOGIN</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+
+      <section>
+        <div class="container my-4">
+          <div class="row bg-white radius mx-2 py-3">
+            <div class="col-lg-8 d-flex justify-content-center align-items-center">
+              <!-- search input -->
+              <div class="search-btn w-100 text-center">
+                <button  data-toggle="modal" data-target="#exampleModal2" class="btn bg-gradient text-white radius m-2" style="padding: 12px; vertical-align:0;">search customer</button>
+                <input type="text" class="form-control border-gradient d-inline-block w-75 radius py-4" placeholder="customer number">
+               <!-- Modal  -->
+                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-gradient" id="exampleModalLabel">Customers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <h5>Customer 1</h5>
+                        <h5>Customer 2</h5>
+                        <h5>Customer 3</h5>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn bg-primary text-white">SEARCH</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div class="col-lg-4 py-2 d-flex justify-content-center align-items-center "> 
+              <!-- username img -->
+              <div class="text-center border-gradient radius d-flex justify-content-center align-items-center">
+                <img src="assets/user.png" alt="user" class="img-fluid radius">
+                <h6 class="text-gradient mx-3">User Name</h6>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </section>
+
+      <section id="userTable2">
+        <div class="container pb-5">
+          <table class="table text-center">
+            <!-- <colgroup>
+              <col span="1" style="width: 5%;">
+              <col span="2" style="width: 5%;">
+              <col span="3" style="width: 5%;">
+              <col span="4" style="width: 5%;">
+              <col span="5" style="width: 20%;">
+              <col span="6" style="width: 20%;">
+              <col span="7" style="width: 20%;">
+           </colgroup> -->
+            <!-- table head -->
+            <thead class="text-white">
+              <tr>
+                <th>Order Number</th>
+                <th>Order Type</th>
+                <th>Customer Name</th>
+                <th>Status</th>
+                <th>Cooking Time</th>
+                <th>Delivery Time</th>
+                <th>Approve</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted">
+              <!-- first row -->
+              <tr>
+                <td data-label="Order Number" class="pt-3">#213</td>
+                <td data-label="Order Type" class="pt-3">Delivery</td>
+                <td data-label="Customer Name" class="pt-3">User</td>
+                <td data-label="Status" class="pt-3">Active</td>
+                
+                <!-- able to edit this data cell -->
+                <td data-label="Cooking Time" class="pt-3 editRow" ><span> <span>60</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer editIcon" ></i>
+                </td>
+
+                <!-- able to edit this data cell -->
+                <td data-label="Delivery Time" class="pt-3 editRow"><span> <span>30</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer mb-2 editIcon"></i>
+                </td>
+
+                <!-- Approve button  -->
+                <td  data-label="Approve">
+                    <button class="btn radius text-white bg-gradient">Approve</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td data-label="Order Number" class="pt-3">#213</td>
+                <td data-label="Order Type" class="pt-3">Delivery</td>
+                <td data-label="Customer Name" class="pt-3">User</td>
+                <td data-label="Status" class="pt-3">Active</td>
+                
+                <!-- able to edit this data cell -->
+                <td data-label="Cooking Time" class="pt-3 editRow" ><span> <span>60</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer editIcon" ></i>
+                </td>
+
+                <!-- able to edit this data cell -->
+                <td data-label="Delivery Time" class="pt-3 editRow"><span> <span>30</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer mb-2 editIcon"></i>
+                </td>
+
+                <!-- Approve button  -->
+                <td  data-label="Approve">
+                    <button class="btn radius text-white bg-gradient">Approve</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td data-label="Order Number" class="pt-3">#213</td>
+                <td data-label="Order Type" class="pt-3">Delivery</td>
+                <td data-label="Customer Name" class="pt-3">User</td>
+                <td data-label="Status" class="pt-3">Active</td>
+                
+                <!-- able to edit this data cell -->
+                <td data-label="Cooking Time" class="pt-3 editRow" ><span> <span>60</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer editIcon" ></i>
+                </td>
+
+                <!-- able to edit this data cell -->
+                <td data-label="Delivery Time" class="pt-3 editRow"><span> <span>30</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer mb-2 editIcon"></i>
+                </td>
+
+                <!-- Approve button  -->
+                <td  data-label="Approve">
+                    <button class="btn radius text-white bg-gradient">Approve</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td data-label="Order Number" class="pt-3">#213</td>
+                <td data-label="Order Type" class="pt-3">Delivery</td>
+                <td data-label="Customer Name" class="pt-3">User</td>
+                <td data-label="Status" class="pt-3">Active</td>
+                
+                <!-- able to edit this data cell -->
+                <td data-label="Cooking Time" class="pt-3 editRow" ><span> <span>60</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer editIcon" ></i>
+                </td>
+
+                <!-- able to edit this data cell -->
+                <td data-label="Delivery Time" class="pt-3 editRow"><span> <span>30</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer mb-2 editIcon"></i>
+                </td>
+
+                <!-- Approve button  -->
+                <td  data-label="Approve">
+                    <button class="btn radius text-white bg-gradient">Approve</button>
+                </td>
+              </tr>
+
+              <tr>
+                <td data-label="Order Number" class="pt-3">#213</td>
+                <td data-label="Order Type" class="pt-3">Delivery</td>
+                <td data-label="Customer Name" class="pt-3">User</td>
+                <td data-label="Status" class="pt-3">Active</td>
+                
+                <!-- able to edit this data cell -->
+                <td data-label="Cooking Time" class="pt-3 editRow" ><span> <span>60</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer editIcon" ></i>
+                </td>
+
+                <!-- able to edit this data cell -->
+                <td data-label="Delivery Time" class="pt-3 editRow"><span> <span>30</span>  minutes</span>
+                  <i class="ml-2 far fa-edit pointer mb-2 editIcon"></i>
+                </td>
+
+                <!-- Approve button  -->
+                <td  data-label="Approve">
+                    <button class="btn radius text-white bg-gradient">Approve</button>
+                </td>
+              </tr>
+
+              
+
+
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+
+
+
+
+      <script src="js/jquery-3.5.1.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/main.js"></script>
+
+ </body>
+</html>

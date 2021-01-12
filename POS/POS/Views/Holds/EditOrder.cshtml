@@ -1,0 +1,810 @@
+﻿@model POS.ViewModel.EditOrderVM
+
+<header>
+    <div class="row no-gutters">
+        <div class="col-md-2 p-0">
+            <aside class="text-center">
+                <div class="logo py-4">
+                    <img src="~/layout/assets/logo.png" alt="logo" class="img-fluid">
+                </div>
+                @*CATEGORIES*@
+                <div class="row no-gutters" id="categories">
+                    @foreach (var item in Model.Categories)
+                    {
+                        <div class="col-12">
+                            <button id="@item.Id" class="btn aside-btn bg-gradient text-white px-4 py-2 radius my-3 shadow cat">
+                                <i class="fas fa-hamburger py-2 fa-2x"></i>
+                                <br>  @item.Name
+                            </button>
+                        </div>
+                    }
+                </div>
+                @*END CATEGORIES*@
+
+                @* BRANCH NAME *@
+                <div class="row no-gutters">
+                    <div class="col-xl-9 col-11 m-auto border-gradient radius py-1 branch">
+                        <div class="d-flex justify-content-center align-items-center py-2 text-dark ">
+                            <i class="fas fa-store mr-3"></i>
+                            <h6 class="m-0">Branch Name</h6>
+                        </div>
+                    </div>
+                </div>
+                @*END BRANCH NAME *@
+
+            </aside>
+        </div>
+
+        <div class="col-md-10 p-0">
+            <section class="bg-mine radius-top-left">
+                <div class="container-lg">
+                    <div class="row no-gutters" id="searchSection">
+                        <div class="col-12 bg-white my-4 py-3 radius">
+                            <div class="row">
+
+                                <div class="col-lg-10">
+                                    <div class="row no-gutters mt-2 search-btn">
+                                        <div class="col-lg-6 py-2">
+                                            @* SEARCH MEAL *@
+                                            <button class="btn bg-gradient ml-4 mr-2 text-white radius searchmeal" style="padding: 13px 15px; vertical-align:0;">search meal</button>
+                                            <input id="searchmeal" type="text" class="form-control border-gradient d-inline w-50 radius py-4" placeholder="Search For Meal">
+                                            @* END SEARCH MEAL *@
+
+                                        </div>
+
+                                        <div class="col-lg-6 py-2">
+                                            <button data-toggle="modal" data-target="#exampleModal2" class="btn bg-gradient ml-4 mr-2 text-white radius custsearch" style="padding: 13px 15px; vertical-align:0;">search customer</button>
+                                            <input type="text" id="custphone" value="@Model.Order.CustPhone" class="form-control border-gradient d-inline w-50 radius py-4" placeholder="customer number">
+                                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header" style=" background: linear-gradient(180deg,#F97F46 0,#F74972); ">
+                                                            <h5 class="modal-title" style="color:white;" id="exampleModalLabel">CUSTOMER INFORAMTION</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" id="custinfo">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m-0">
+                        <div class="col-xl-7 col-sm-9">
+                            <div class="row" id="meals">
+
+
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-sm-3 my-3 bg-gradient radius py-2" id="mealdetail">
+                            <h6 class='text-center text-white my-3'>
+                                NAME OF MEAL
+                            </h6>
+                            <div class='bg-white overflow-auto radius py-3 px-2 my-3 meal-details'>
+                                <small class='text-gradient float-left'>
+                                    <b>150 gram </b>
+                                </small>
+                                <small class='text-gradient float-right'>
+                                    <b>20 AED</b>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 my-3">
+                            <form asp-action="EditOrder" id="saveorder" class="order">
+                                <input type="text"  id="orderid" asp-for="Order.Id" style="display:none"/>
+                                <div class="order-type mt-3">
+                                    <div class="text-center">
+                                        <div class="d-inline-block my-1" style="width: fit-content;">
+                                            <label class="text-center text-gradient w-100" style="font-size: 16px;">TYPE</label>
+                                        </div>
+                                        <div class="bg-white p-1 radius d-inline-block my-1" style="width: fit-content;">
+                                            <input type="radio" name="ordertype" value="TAKE AWAY" class="required" checked>
+                                            <label class="m-0 text-gradient">TAKE AWAY</label>
+                                        </div>
+                                        <div class="bg-white p-1 radius d-inline-block my-1" style="width: fit-content;">
+                                            <input type="radio" name="ordertype" value="DILIVARY" class="required">
+                                            <label class="m-0 text-gradient">DILIVARY</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3" id="select-order">
+                                    <div class="form-group">
+                                        <label class="text-gradient">Branch</label>
+                                        <select class=" form-control branchid" asp-items="@(new SelectList(Model.Branches,"Id","Name"))">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="text-gradient">Address</label>
+                                        <select class="form-control address">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group d-flex">
+                                        <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
+                                            <label style="font-size: 8px;" for="">NET</label>
+                                            <input type="text"   value="@Model.Order.Net"  id="netInput" style="width: 38px;" class="mx-1 text-center in text-gradient border-gradient netInput">
+                                        </div>
+
+                                        <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
+                                            <label style="font-size: 8px;" for="">TAX</label>
+                                            <input type="text" value="@Model.Order.Tax" id="taxInput" style="width: 38px;" class="mx-1 in text-center text-gradient border-gradient taxInput">
+                                        </div>
+
+                                        <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
+                                            <label style="font-size: 8px;" for="">SERVICE</label>
+                                            <input type="text" value="@Model.Order.Service"  id="serviceInput" style="width: 38px;" class="mx-1 in text-center text-gradient border-gradient serviceInput">
+                                        </div>
+
+                                        <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
+                                            <label style="font-size: 8px;" for="">DISCOUNT</label>
+                                            <input placeholder="%" value="@Model.Order.Discount"   type="text" id="discountInput" style="width: 38px;" class="mx-1 in text-center text-gradient border-gradient discountInput">
+                                        </div>
+
+                                        <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center ">
+                                            <label style="font-size: 8px;" for="">TOTAL</label>
+                                            <input type="text" value="@Model.Order.Total" id="totalInput" style="width: 45px;" class="mx-1 text-center text-gradient border-gradient" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div id="order" style="overflow-y: scroll; overflow-x: hidden;">
+                                    @foreach (var item in Model.OrderDetails)
+                                    {
+                                        <div class="order-number overflow-auto my-4">
+                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                <i class="far fa-trash-alt text-gradient pointer" onclick='deleteOrder(event)'></i>
+                                                <div class="alldata ml-2">
+                                                    <h6 class="m-0" style="font-size: 14px;" id="@item.Meal.Id" data-topass="@item.Meal.Name">@item.Meal.Name</h6>
+                                                    <p class="text-muted itemname" id="@item.Meal.Id" data-topass="@item.Meal.Name">@item.Meal.Name</p>
+                                                    <span class="text-muted price" data-topass="@item.UnitPrice">@item.UnitPrice</span><span class="text-muted"> AED</span>
+
+                                                </div>
+                                            </div>
+                                            <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                <div class="num">@item.Quantity</div>
+                                                <div class="counterBtn">
+                                                    <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                        <i class="fas fa-angle-up"></i>
+                                                    </button>
+                                                    <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                        <i class="fas fa-angle-down"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+
+                                    }
+                                </div>
+                                <button class="btn bg-gradient radius btn-block text-white mt-3 save" type="button">SAVE</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</header>
+
+
+<partial name="_OrderPartial" />
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("input", ".in", function () {
+                let total = parseFloat($('#netInput').val()) + parseFloat($('#taxInput').val())
+                    + parseFloat($('#serviceInput').val());
+                let q = parseFloat($(".orderqan")).val();
+                let x = total;
+                $("#totalInput").val(x);
+            });
+            $(".cat").click(function () {
+                var id = $(this).attr("id");
+                var url = "/Order/GetMeals";
+                var item = "";
+                $("#meals").empty();
+                $("#mealdetail").empty();
+                $.getJSON(url, { id: id }, function (data) {
+                    $("#meals").html(data);
+                    $(".buyNow").click(function () {
+                        var id = $(this).attr("id");
+                        var url = "/Order/GetDetails";
+                        $.getJSON(url, { id: id }, function (data) {
+                            $("#mealdetail").html(data);
+                            $(".meal-details").click(function () {
+                                var id = $(this).attr("id");
+                                var mealname = $(".mealname").attr("data-topass");
+                                var mealid = $(".mealname").attr("id");
+                                var qan = $("#" + id + 'q')[0].innerText;
+                                var pri = $("#" + id + "p")[0].innerText;
+                                var t = `
+                                                                        <div id="order-number" class="order-number overflow-auto my-4">
+
+
+                                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                                <div class="ml-2 alldata">
+                                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                                            <div class="num">1</div>
+                                                                            <div class="counterBtn">
+                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                                    <i class="fas fa-angle-up"></i>
+                                                                                </button>
+                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                                    <i class="fas fa-angle-down"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="clearfix"></div>
+                                                                        </div>
+                                                                              `;
+                                $("#order").append(t);
+                                let total = 0;
+                                let qun = 0;
+                                let p = $(".order-number .price");
+                                let vl = parseFloat($("#netInput").val());
+                                let vl2 = parseFloat($("#totalInput").val());
+                                for (var i = 0; i < p.length; i++) {
+                                    total = parseFloat(p[i].innerText);
+                                }
+                                $("#netInput").val(total + vl);
+                                $("#totalInput").val(total + vl2);
+                            });
+                        });
+
+                    });
+                });
+            });
+
+            //SAVE ORDER
+            $(".save").click(function () {
+                if (!$('.address').val()) {
+                    var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
+                                                                         style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                                          <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                                           style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                                            <span class="text-white">ERROR</span>
+                                                                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                          </button>
+                                                                          </div>
+                                                                          <div class="card-body">
+                                                                            <p class="text-white">PLEASE SELECT ADDRESS</p>
+                                                                          </div>
+                                                                        </div>`;
+                    $("#saveorder").append(x);
+                    return;
+                };
+                var x = $("#order").children(".order-number").length
+
+                if (x == 0) {
+                    var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
+                                                                         style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                                          <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                                           style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                                            <span class="text-white">ERROR</span>
+                                                                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                          </button>
+                                                                          </div>
+                                                                          <div class="card-body">
+                                                                            <p class="text-white">NO ORDER ITEM IN LIST</p>
+                                                                          </div>
+                                                                        </div>`;
+                    $("#saveorder").append(x);
+                    return;
+                }
+                var userwow = $(".userid").val();
+                var type = $('input[name="ordertype"]:checked').val();
+                var custphone = $('#custphone').val();
+                var branchid = $(".branchid").val();
+                var addid = $(".address").val();
+                var tax = getInputTaxValue();
+                var discount = getInputDiscountValue();
+                var service = getInputServiceValue();
+                var net = $("#netInput").val();
+                let t = $("#totalInput").val();
+                let orderid = $("#orderid").val();
+                var details = new Array();
+                var orderdetail = $(".alldata").each(function () {
+                    var orders = {};
+                    var mid = $(this).children('.itemname');
+                    var price = $(this).children('.price');
+                    var q = $(this).parents(".order-number").children(".counter").children(".num")[0].innerText;
+                    orders.MealId = mid.attr("id");
+                    orders.Quantity = q;
+                    orders.UnitPrice = price.html();
+
+                    details.push(orders);
+                });
+                var model = {
+                    OrderdetailVMs: details,
+                    UserId: userwow,
+                    Type: type,
+                    Phone: custphone,
+                    BranchId: branchid,
+                    AddressID: addid,
+                    Tax: tax,
+                    Discount: discount,
+                    Service: service,
+                    Net: net,
+                    Total: t,
+                    OrderId: orderid,
+                };
+                $.ajax({
+                    type: "post",
+                    url: "/Holds/EditOrder",
+
+                    data: model,
+                    success: function (data) {
+                        window.location = '/Order/Index';
+                    },
+                    error: function (err) {
+                        alert('error' + err.responsetext);
+                    }
+                })
+
+            });
+            //customer serch
+            $(".custsearch").click(function () {
+                var phone1 = $('#custphone').val();
+                var phone2 = $('#custphone').val();
+                var url = "/Order/GetCustomer";
+                var url1 = "/Order/GetAddress";
+                $("#custinfo").empty();
+                $(".address").empty();
+                $(".address").html("<option disabled selected>choose an address</option>");
+                $.getJSON(url, { phone1: phone1, phone2: phone2 }, function (data) {
+                    $("#custinfo").html(data);
+
+                })
+                $.getJSON(url1, { phone1: phone1, phone2: phone2 }, function (data) {
+                    $(".address").html(data)
+                })
+            });
+            $(".searchmeal").click(function () {
+                var meal = $('#searchmeal').val();
+
+                var url = "/Order/SearchMeal";
+                $("#meals").empty();
+                $.getJSON(url, { meal: meal }, function (data) {
+                    $("#meals").html(data);
+                    $(".buyNow").click(function () {
+                        var id = $(this).attr("id");
+                        var url = "/Order/GetDetails";
+                        $.getJSON(url, { id: id }, function (data) {
+                            $("#mealdetail").html(data);
+                            $(".meal-details").click(function () {
+                                var id = $(this).attr("id");
+                                var mealname = $(".mealname").attr("data-topass");
+                                var mealid = $(".mealname").attr("id");
+                                var qan = $("#" + id + 'q')[0].innerText;
+                                var pri = $("#" + id + "p")[0].innerText;
+
+                                var t = `
+                                                                        <div id="order-number" class="order-number overflow-auto my-4">
+
+
+                                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                                <div class="ml-2 alldata">
+                                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                                            <div class="num">1</div>
+                                                                            <div class="counterBtn">
+                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                                    <i class="fas fa-angle-up"></i>
+                                                                                </button>
+                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                                    <i class="fas fa-angle-down"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="clearfix"></div>
+                                                                        </div>
+                                                                              `;
+                                $("#order").append(t);
+                                let total = 0;
+                                let qun = 0;
+                                let p = $(".order-number .price");
+                                let vl = parseFloat($("#netInput").val());
+                                for (var i = 0; i < p.length; i++) {
+                                    total = parseFloat(p[i].innerText);
+                                }
+                                $("#netInput").val(total + vl);
+                                $("#totalInput").val(total + vl);
+                            });
+                        });
+
+                    });
+
+                })
+            });
+
+            // TAX VALUE
+            function getInputTaxValue() {
+                if ($('#taxInput').val().slice(-1) == '%') {
+                    let x = (Number($('#taxInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#taxInput').val();
+                    return x.toString();
+                }
+            }
+
+            // SERVICE VALUE
+            function getInputServiceValue() {
+                if ($('#serviceInput').val().slice(-1) == '%') {
+                    let x = (Number($('#serviceInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#serviceInput').val();
+                    return x.toString();
+                }
+            }
+
+            // DISCOUNT VALUE
+            function getInputDiscountValue() {
+                if ($('#discountInput').val().slice(-1) == '%') {
+                    let x = (Number($('#discountInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#discountInput').val();
+                    return x.toString();
+                }
+            }
+
+            // ============================================== Tax ==============================================
+
+            // calculate Tax by percentage or num
+            $('#taxInput').blur(() => {
+                let Net = Number($('#netInput').val());
+                let ServiceValue = getInputServiceValue();
+                let taxValue = getInputTaxValue();
+                let discountValue = getInputDiscountValue();
+                let totalValues;
+                let totalCalc;
+
+                // tax % - service % - discount %
+                if (typeof (getInputServiceValue()) == 'number' && typeof (getInputDiscountValue()) == 'number' && typeof (getInputTaxValue()) == 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // tax % - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service num - discount num
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // =======================================================================
+                // tax num - service num - discount num
+                else if (typeof (getInputServiceValue()) == 'string' && typeof (getInputDiscountValue()) == 'string' && typeof (getInputTaxValue()) == 'string') {
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    totalValues = Number(Net) + Number(taxValue) + Number(ServiceValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount %
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                if (totalCalc > 0) {
+                    $('#totalInput').val(totalCalc)
+                } else {
+                    $('#totalInput').val(0)
+                }
+            });
+
+
+            // ============================================== service ==============================================
+
+            // calculate service by percentage or num
+            $('#serviceInput').blur(() => {
+                let Net = Number($('#netInput').val());
+                let ServiceValue = getInputServiceValue();
+                let taxValue = getInputTaxValue();
+                let discountValue = getInputDiscountValue();
+                let totalValues;
+                let totalCalc;
+
+                // tax % - service % - discount %
+                if (typeof (getInputServiceValue()) == 'number' && typeof (getInputDiscountValue()) == 'number' && typeof (getInputTaxValue()) == 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // tax % - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service num - discount num
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // =======================================================================
+                // tax num - service num - discount num
+                else if (typeof (getInputServiceValue()) == 'string' && typeof (getInputDiscountValue()) == 'string' && typeof (getInputTaxValue()) == 'string') {
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    totalValues = Number(Net) + Number(taxValue) + Number(ServiceValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount %
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                if (totalCalc > 0) {
+                    $('#totalInput').val(totalCalc)
+                } else {
+                    $('#totalInput').val(0)
+                }
+            });
+
+            // ============================================== discountInput ================================================== 
+
+            // calculate discount by percentage or num
+            $('#discountInput').blur(() => {
+                let Net = Number($('#netInput').val());
+                let ServiceValue = getInputServiceValue();
+                let taxValue = getInputTaxValue();
+                let discountValue = getInputDiscountValue();
+                let totalValues;
+                let totalCalc;
+
+                // tax % - service % - discount %
+                if (typeof (getInputServiceValue()) == 'number' && typeof (getInputDiscountValue()) == 'number' && typeof (getInputTaxValue()) == 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // tax % - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax % - service num - discount num
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'number') {
+                    taxValue = Number(taxValue) * Number(Net);
+                    totalCalc = (Number(Net) + Number(taxValue) + Number(ServiceValue)) - Number(discountValue);
+                }
+                // =======================================================================
+                // tax num - service num - discount num
+                else if (typeof (getInputServiceValue()) == 'string' && typeof (getInputDiscountValue()) == 'string' && typeof (getInputTaxValue()) == 'string') {
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service num - discount %
+                else if (typeof (getInputServiceValue()) === 'string' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    totalValues = Number(Net) + Number(taxValue) + Number(ServiceValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount num
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'string' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                // tax num - service % - discount %
+                else if (typeof (getInputServiceValue()) === 'number' && typeof (getInputDiscountValue()) === 'number' && typeof (getInputTaxValue()) === 'string') {
+                    ServiceValue = Number(ServiceValue) * Number(Net);
+                    totalValues = Number(Net) + Number(ServiceValue) + Number(taxValue);
+                    discountValue = Number(totalValues) * Number(discountValue);
+                    totalCalc = Number(totalValues) - Number(discountValue);
+                }
+                if (totalCalc > 0) {
+                    $('#totalInput').val(totalCalc)
+                } else {
+                    $('#totalInput').val(0)
+                }
+            });
+
+        
+
+        });
+        // Counter Up
+        function getCounterUp(event) {
+            event.preventDefault();
+          
+            
+            let buttonUp = document.querySelectorAll(".counterUp");
+            let countUp = 1;
+            if (event.composedPath()[3].className == "counter float-right d-flex justify-content-center align-items-center") {
+                debugger;
+                countUp = Number(event.composedPath()[3].children[0].innerText) + 1;
+                event.composedPath()[3].children[0].innerText = countUp;
+                let pri = event.composedPath()[4].children[0].children[1].children[2].innerText;
+                let q = event.composedPath()[4].children[1].children[0].innerText;
+                let netqold = parseFloat(pri) * parseFloat(q - 1);
+                let netq = parseFloat(pri) * parseFloat(q);
+                let x = parseFloat($("#netInput").val()) + (netq - netqold);
+                let y = parseFloat($("#totalInput").val()) + (netq - netqold);
+                $("#netInput").val(x);
+                $("#totalInput").val(y);
+
+            } else {
+                debugger;
+                countUp = Number(event.composedPath()[2].children[0].innerText) + 1;
+                event.composedPath()[2].children[0].innerText = countUp;
+                let pri = event.composedPath()[3].children[0].children[1].children[2].innerText;
+                let q = event.composedPath()[3].children[1].children[0].innerText;
+                let netqold = parseFloat(pri) * parseFloat(q - 1);
+                let netq = parseFloat(pri) * parseFloat(q);
+                let x = parseFloat($("#netInput").val()) + (netq - netqold);
+                let y = parseFloat($("#totalInput").val()) + (netq - netqold);
+                $("#netInput").val(x);
+                $("#totalInput").val(y);
+
+
+            }
+
+            for (let i = 0; i < buttonUp.length; i++) {
+                $(buttonUp[i]).css({ 'box-shadow': "none", 'outline': "0" });
+            }
+
+        }
+
+        // Counter Down
+        function getCounterDown(event) {
+            
+
+            event.preventDefault();
+            let buttonDown = document.querySelectorAll(".counterDown");
+            let countDown = 1;
+
+            if (event.composedPath()[3].className == "counter float-right d-flex justify-content-center align-items-center") {
+
+                if (event.composedPath()[3].children[0].innerText > 1) {
+                    countDown = Number(event.composedPath()[3].children[0].innerText) - 1;
+                    event.composedPath()[3].children[0].innerText = countDown;
+                    let pri = event.composedPath()[4].children[0].children[1].children[2].innerText;
+                    let q = event.composedPath()[4].children[1].children[0].innerText;
+                    let netqold = parseFloat(pri) * parseFloat(q - 1);
+                    let netq = parseFloat(pri) * parseFloat(q);
+                    let x = parseFloat($("#netInput").val()) - (netq - netqold);
+                    let y = parseFloat($("#totalInput").val()) - (netq - netqold);
+                    $("#netInput").val(x);
+                    $("#totalInput").val(y);
+                }
+
+
+            } else {
+
+                if (event.composedPath()[2].children[0].innerText > 1) {
+                    countDown = Number(event.composedPath()[2].children[0].innerText) - 1;
+                    event.composedPath()[2].children[0].innerText = countDown;
+                    let pri = event.composedPath()[3].children[0].children[1].children[2].innerText;
+                    let q = event.composedPath()[3].children[1].children[0].innerText;
+                    let netqold = parseFloat(pri) * parseFloat(q - 1);
+                    let netq = parseFloat(pri) * parseFloat(q);
+                    let x = parseFloat($("#netInput").val()) - (netq - netqold);
+                    let y = parseFloat($("#totalInput").val()) - (netq - netqold);
+                    $("#netInput").val(x);
+                    $("#totalInput").val(y);
+
+                }
+
+            }
+
+            for (let i = 0; i < buttonDown.length; i++) {
+                $(buttonDown[i]).css({ 'box-shadow': "none", 'outline': "0" });
+            }
+        }
+        //delete item
+        function deleteOrder(event) {
+            //let total = 0;
+            //let qun = 0;
+            //let vl = parseFloat($("#netInput").val());
+
+            //let p = $(".order-number .price");
+            //for (var i = 0; i < p.length; i++) {
+            //    total = parseFloat(p[i].innerText);
+            //};
+            //let q = $(".order-number .num");
+            //for (let y = 0; y < q.length; y++) {
+            //    qun = parseFloat(q[i].innerText);
+            //};
+            //alert(qun);
+            let q = event.composedPath()[2].children[1].children[0].innerText;
+            let p = event.composedPath()[2].children[0].children[1].children[2].innerText;
+            let tot = parseFloat(q) * parseFloat(p);
+            let total = parseFloat($("#netInput").val() - tot);
+            let total1 = parseFloat($("#totalInput").val() - tot);
+            $("#netInput").val(total);
+            $("#totalInput").val(total1);
+            event.composedPath()[2].remove();
+        }
+
+
+    </script>
+}
