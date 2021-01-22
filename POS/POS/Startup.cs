@@ -76,6 +76,7 @@ namespace POS
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
                 endpoints.MapHub<NotificationHub>("/notificationHub");
+                endpoints.MapHub<MessageHub>("/messageHub");
                 endpoints.MapRazorPages();
             });
 

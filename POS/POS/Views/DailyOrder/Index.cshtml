@@ -1,36 +1,40 @@
 ﻿@model DailyOrderVM
-    <section>
-        <div class=" my-2">
-            <div class="row bg-white radius mx-2 py-3">
-                <div class="col-lg-12 d-flex justify-content-center align-items-center">
-                    <form  asp-action="SearchDate" method="get">
-                        <div class="row m-0">
-                            <div class="col-lg-12 p-0">
-                                <h3 class="text-gradient2"><label>Today's profits</label></h3>
-                                <div class="row m-0">
-                                    <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                        <input type="text" value="@ViewBag.total" class="form-control search-slt" disabled>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                        <input type="date" asp-for="Serchdate" class="form-control search-slt">
-                                    </div>
-
-                                    <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                        <select class="form-control search-slt" asp-for="BranchId" asp-items="@(new SelectList(Model.Branches,"Id","Name"))">
-                                            <option disabled selected>Select Branch</option>
+    <div class=" my-2">
+        <div class="row bg-white radius mx-2 py-3">
+            <div class="col-lg-12 d-flex justify-content-center align-items-center">
+                <form asp-action="SearchDate" method="get">
+                    <div class="row m-0">
+                        <div class="col-lg-12 p-0">
+                            <h3 class="text-gradient2"><label>Today's profits</label></h3>
+                            <div class="row m-0">
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <input type="text" value="@(Math.Round(ViewBag.total, 2))" class="form-control search-slt total" disabled>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <input type="date" asp-for="Serchdate" class="form-control search-slt date">
+                                </div>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="col-lg-2 col-md-3 col-sm-12 p-0">
+                                        <select class="form-control search-slt bran" asp-for="BranchId" asp-items="@(new SelectList(Model.Branches,"Id","Name"))">
+                                            <option disabled selected>all Branch</option>
                                         </select>
                                     </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                                        <button type="submit" class="btn btn-dark wrn-btn text-gradient2 d-flex justify-content-center align-items-center">Search</button>
-                                    </div>
+                                }
+
+                                <div class="col-lg-2 col-md-3 col-sm-12 p-0">
+                                    <button type="submit" class="btn btn-dark wrn-btn text-gradient2 d-flex justify-content-center align-items-center">SEARCH</button>
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-sm-12 p-0">
+                                    <button id="print" type="button" class="btn btn-outline-light wrn-btn text-gradient2 d-flex justify-content-center align-items-center"><i class="fas fa-print"></i>PRINT</button>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
 <section id="user-table">
     <div class="container pb-5">
         <table class="table text-center">
@@ -47,20 +51,20 @@
                     <th>Details</th>
                 </tr>
             </thead>
-            <tbody class="text-muted">
-               
+            <tbody class="text-muted print">
+
                 @foreach (var item in Model.Orders)
                 {
                     <tr>
-                        <td data-label="Order Number">@item.Id</td>
-                        <td data-label="Order Type">@item.Type</td>
-                        <td data-label="Order date">@item.OrderDate</td>
-                        <td data-label="Order Net">@item.Net</td>
-                        <td data-label="Order Service">@item.Service</td>
-                        <td data-label="Order Tax">@item.Tax</td>
-                        <td data-label="Order Discount">@item.Discount</td>
-                        <td data-label="Order Total">@item.Total</td>
-                        <td data-label="Details"><a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle pointer"></i></a></td>
+                    <td data-label="Order Number">@item.Id</td>
+                    <td data-label="Order Type">@item.Type</td>
+                    <td data-label="Order date">@item.OrderDate</td>
+                    <td data-label="Order Net">@item.Net</td>
+                    <td data-label="Order Service">@item.Service</td>
+                    <td data-label="Order Tax">@item.Tax</td>
+                    <td data-label="Order Discount">@item.Discount</td>
+                    <td data-label="Order Total">@item.Total </td>
+                    <td data-label="Details"><a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle pointer"></i></a><br /></td>
                     </tr>
                 }
 
@@ -68,3 +72,25 @@
         </table>
     </div>
 </section>
+@section Scripts{
+    <script>
+        $("#print").click(function () {
+            $(".print").print({
+                //Use Global styles
+                globalStyles: true,
+                //Add link with attrbute media=print
+                mediaPrint: false,
+                //Custom stylesheet
+                stylesheet: "~/layout/css/site.css",
+                //Print in a hidden iframe
+                iframe: true,
+                //Add this at top
+                prepend: "<div class='text-danger' style='border:2px solid black'><h3>Total Day Profit Is :" + $(".total").val() + "</h3>" + "<h5>" + $(".bran option:selected").text() + "</h5>" + "<h6>Profit date :+" + $(".date").val()+"</h6></div>",
+                //Add this on bottom
+                append: "<span><br/>Buh Bye!</span>",
+                //Log to console when printing is done via a deffered callback
+                deferred: $.Deferred().done(function () { console.log('Printing done', arguments); })
+            });
+        })
+    </script>
+}

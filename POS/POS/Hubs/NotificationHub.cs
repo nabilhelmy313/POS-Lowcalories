@@ -8,6 +8,5 @@ namespace POS.Hubs
 {
     public class NotificationHub:Hub
     {
-        
     }
 }

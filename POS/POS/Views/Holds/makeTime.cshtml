@@ -4,21 +4,13 @@
     ViewData["Title"] = "makeTime";
 }
 
-<h1>makeTime</h1>
 
-<h4>Order</h4>
-<hr />
-<div class="row">
+<div>
     <div class="col-md-4 container">
         <form asp-action="makeTime">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
 
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="CookingTime" class="control-label"></label>
                 <input asp-for="CookingTime" class="form-control" />

@@ -362,6 +362,37 @@ namespace POS.Migrations
                     b.ToTable("Meals");
                 });
 
+            modelBuilder.Entity("POS.Data.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("MessageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TextMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("POS.Data.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -446,6 +477,9 @@ namespace POS.Migrations
 
                     b.Property<int?>("MealId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -550,6 +584,17 @@ namespace POS.Migrations
                     b.HasOne("POS.Data.Category", "Category")
                         .WithMany("Meals")
                         .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("POS.Data.Message", b =>
+                {
+                    b.HasOne("POS.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("POS.Data.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
                 });
 
             modelBuilder.Entity("POS.Data.Order", b =>

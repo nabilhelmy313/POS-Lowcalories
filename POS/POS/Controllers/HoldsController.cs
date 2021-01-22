@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace POS.Controllers
 {
+    [Authorize]
     public class HoldsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,54 +29,106 @@ namespace POS.Controllers
             this.hub = hub;
             this.userManager = userManager;
         }
-        public IActionResult Index(HoldVM holdVM)
+        public async Task<IActionResult> Index(HoldVM holdVM)
         {
-
-            if (holdVM.CustPhone==null)
+            if (User.IsInRole("Branch"))
             {
-                var stat = _context.Orders.Where(s => s.Status == 0 || s.Status == 1).ToList();
-                holdVM.Orders = stat;
-                if (stat.Count != 0)
+                var UserId = userManager.GetUserId(HttpContext.User);
+                var user = await userManager.FindByIdAsync(UserId);
+                var b = _context.Branches.Where(b => b.Name == user.Branch).FirstOrDefault();
+                if (holdVM.CustPhone == null)
                 {
-                    foreach (var item in stat)
+                    var stat = _context.Orders.Where(s => s.Status == 0 || s.Status == 1).ToList();
+                    holdVM.Orders = stat;
+                    if (stat.Count != 0)
                     {
-                        if (item.Status == 0 || item.Status == 1)
+                        foreach (var item in stat)
                         {
-                            var holde = _context.Orders.Where(s => s.Status == 0 || s.Status == 1).OrderByDescending(o => o.OrderDate).ToList();
-                            holdVM.Orders = holde;
-                            return View(holdVM);
+                            if (item.Status == 0 || item.Status == 1)
+                            {
+                                var holde = _context.Orders
+                                    .Where(s => (s.Status == 0 || s.Status == 1) && s.Branch == b)
+                                    .OrderByDescending(o => o.OrderDate).ToList();
+                                holdVM.Orders = holde;
+                                return View(holdVM);
+                            }
                         }
                     }
-
-                }
-
-                return View(holdVM);
-            }
-            else
-            {
-                var stat = _context.Orders.Where(s=>s.CustPhone==holdVM.CustPhone).ToList();
-                holdVM.Orders = stat; ;
-                if (stat.Count != 0)
-                {
-                    foreach (var item in stat)
-                    {
-                        if (item.Status == 0 || item.Status == 1)
-                        {
-                            var holde = _context.Orders.Where(s => s.Status == 0 || s.Status == 1&&s.CustPhone==holdVM.CustPhone).OrderByDescending(o => o.OrderDate).ToList();
-                            holdVM.Orders = holde;
-                            return View(holdVM);
-                        }
-                    }
-
+                    return View(holdVM);
                 }
                 else
                 {
+                    var stat = _context.Orders.Where(s => s.CustPhone == holdVM.CustPhone).ToList();
                     holdVM.Orders = stat;
+                    if (stat.Count != 0)
+                    {
+                        foreach (var item in stat)
+                        {
+                            if (item.Status == 0 || item.Status == 1)
+                            {
+                                var holde = _context.Orders.
+                                    Where(s => s.CustPhone == holdVM.CustPhone && s.Branch == b).OrderByDescending(o => o.OrderDate).ToList();
+                                holdVM.Orders = holde;
+
+                            }
+
+                        }
+                        return View(holdVM);
+                    }
+                    else
+                    {
+                        holdVM.Orders = stat;
+                        return View(holdVM);
+                    }
                     return View(holdVM);
                 }
-                return View(holdVM);
             }
-           
+            else
+            {
+                if (holdVM.CustPhone == null)
+                {
+                    var stat = _context.Orders.Where(s => s.Status == 0 || s.Status == 1).ToList();
+                    holdVM.Orders = stat;
+                    if (stat.Count != 0)
+                    {
+                        foreach (var item in stat)
+                        {
+                            if (item.Status == 0 || item.Status == 1)
+                            {
+                                var holde = _context.Orders.Where(s => s.Status == 0 || s.Status == 1).OrderByDescending(o => o.OrderDate).ToList();
+                                holdVM.Orders = holde;
+                                return View(holdVM);
+                            }
+                        }
+                    }
+                    return View(holdVM);
+                }
+                else
+                {
+                    var stat = _context.Orders.Where(s => s.CustPhone == holdVM.CustPhone).ToList();
+                    holdVM.Orders = stat;
+                    if (stat.Count != 0)
+                    {
+                        foreach (var item in stat)
+                        {
+                            if (item.Status == 0 || item.Status == 1)
+                            {
+                                var holde = _context.Orders.Where(s => s.CustPhone == holdVM.CustPhone).OrderByDescending(o => o.OrderDate).ToList();
+                                holdVM.Orders = holde;
+
+                            }
+
+                        }
+                        return View(holdVM);
+                    }
+                    else
+                    {
+                        holdVM.Orders = stat;
+                        return View(holdVM);
+                    }
+                    return View(holdVM);
+                }
+            }
         }
         //SEARCH CUSTOMER HOLD
         //public JsonResult SearchCustomer(string number)
@@ -99,7 +153,7 @@ namespace POS.Controllers
         //            {
         //                var hold = _context.Orders.Where(s => s.Status == 0|| s.Status == 1).ToList();
         //                StringBuilder builder = new StringBuilder();
-                        
+
         //                hold.ForEach(m =>
         //                builder.AppendFormat(html, m.Id, m.Type, m.CustPhone, m.Status,
         //                m.OrderDate.Add(m.DiliveryTime.TimeOfDay - m.OrderDate.TimeOfDay).TimeOfDay - m.OrderDate.TimeOfDay
@@ -138,10 +192,44 @@ namespace POS.Controllers
         {
             var UserId = userManager.GetUserId(HttpContext.User);
             var user = await userManager.FindByIdAsync(UserId);
-           
-            var x = _context.Orders.Include(b=>b.Branch).Include(u=>u.ApplicationUser).
-                Where(s => s.Status != 3 &&s.Branch.Name==user.Branch).OrderBy(o => o.OrderDate).ToList();
-            return View(x);
+            SerchVM vM = new SerchVM();
+            if (!User.IsInRole("Admin"))
+            {
+                var x = _context.Orders.Include(b => b.Branch).Include(u => u.ApplicationUser).
+              Where(s => s.Status != 3 && s.Branch.Name == user.Branch).OrderBy(o => o.OrderDate).ToList();
+                vM.Orders = x;
+                return View(vM);
+            }
+            else
+            {
+                var x = _context.Orders.Include(b => b.Branch).Include(u => u.ApplicationUser).
+                    Where(s => s.Status != 3).OrderBy(o => o.OrderDate).ToList();
+
+                vM.Orders = x;
+
+                return View(vM);
+            }
+
+        }
+        [HttpGet]
+        public IActionResult SearchEditHold(SerchVM vM)
+        {
+
+            if (!User.IsInRole("Admin"))
+            {
+                var x = _context.Orders.Include(b => b.Branch).Include(u => u.ApplicationUser).
+              Where(s => s.Status != 3 && s.CustPhone == vM.Custphone).OrderByDescending(o => o.OrderDate).ToList();
+                vM.Orders = x;
+                return View("EditHold", vM);
+            }
+            else
+            {
+                var x = _context.Orders.Include(b => b.Branch).Include(u => u.ApplicationUser).
+                    Where(s => s.Status != 3 && s.CustPhone == vM.Custphone).OrderBy(o => o.OrderDate).ToList();
+                vM.Orders = x;
+
+                return View("EditHold", vM);
+            }
         }
         [HttpGet]
         public async Task<IActionResult> MakeTime(int? id)
@@ -154,8 +242,8 @@ namespace POS.Controllers
             EditHoldViewModel model = new EditHoldViewModel
             {
                 OrderDate = order.OrderDate,
-                CookingTime = (order.CookingTime - order.OrderDate).Minutes,
-                DiliveryTime = (order.DiliveryTime - order.CookingTime).Minutes,
+                CookingTime = 0,
+                DiliveryTime =0,
                 Type = order.Type,
                 Status = 1
             };
@@ -166,6 +254,7 @@ namespace POS.Controllers
             }
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> MakeTime(int id, EditHoldViewModel model)
         {
@@ -185,7 +274,6 @@ namespace POS.Controllers
                         order.CookingTime = DateTime.Now.AddMinutes(model.CookingTime);
                         var x = order.CookingTime.Minute - order.OrderDate.Minute;
                         order.DiliveryTime = DateTime.Now.AddMinutes((model.DiliveryTime + x));
-                        order.Type = model.Type;
                         order.Status = 1;
                         _context.Update(order);
                         await _context.SaveChangesAsync();
@@ -224,7 +312,7 @@ namespace POS.Controllers
                 StringBuilder builder = new StringBuilder();
                 modeladmin.ForEach(o =>
                 {
-                    builder.AppendFormat(notifcation, o.OrderDate, o.Id);
+                    builder.AppendFormat(notifcation, o.OrderDate.ToString("hh:mm tt"), o.Id);
                 });
                 return Json(builder.ToString());
             }
@@ -351,15 +439,15 @@ namespace POS.Controllers
             order.Address = address;
             order.Net = orderVM.Net;
             if (orderVM.Service < 1)
-                order.Service = orderVM.Net - (orderVM.Service * 100);
+                order.Service = (orderVM.Service * orderVM.Net);
             else
                 order.Service = orderVM.Service;
             if (orderVM.Tax < 1)
-                order.Tax = orderVM.Net - (orderVM.Tax * 100);
+                order.Tax = (orderVM.Tax * orderVM.Net);
             else
                 order.Tax = orderVM.Tax;
             if (orderVM.Discount < 1)
-                order.Discount = orderVM.Net - (orderVM.Discount * 100);
+                order.Discount = (orderVM.Discount * orderVM.Net);
             else
                 order.Discount = orderVM.Discount;
             order.Total = orderVM.Total;
@@ -383,18 +471,27 @@ namespace POS.Controllers
             }
 
 
-            return View();
+            return RedirectToAction(nameof(Index), "Order");
         }
         [HttpGet]
         public IActionResult CancelOrder(int? id)
         {
-            Order o = _context.Orders.Where(i => i.Id == id).FirstOrDefault();
-            return View(o);
+            var o = _context.Orders.Include(b => b.Branch).Where(i => i.Id == id).FirstOrDefault();
+            CancelOrderVM vM = new CancelOrderVM
+            {
+                order = o,
+                BranchName = o.Branch.Name
+            };
+           
+            return View(vM);
         }
         [HttpPost]
-        public IActionResult CancelOrder(int id)
+        public async Task<IActionResult> CancelOrder(CancelOrderVM vM)
         {
-            Order o = _context.Orders.Find(id);
+
+            Order o = _context.Orders.Find(vM.order.Id);
+            string bran = vM.BranchName;
+            await CancelMessage(vM.order.Id, DateTime.Now, bran);
             var det = _context.OrderDetails.Where(or => or.Order == o).ToList();
             if (det.Count() != 0)
             {
@@ -408,6 +505,16 @@ namespace POS.Controllers
             _context.Orders.Remove(o);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
+        }
+        public async Task CancelMessage(int id, DateTime date, string branch)
+        {
+            var users = userManager.Users.Where(b => b.Branch == branch).ToList();
+            List<string> userids = new List<string>();
+            foreach (var item in users)
+            {
+                userids.Add(item.Id);
+            }
+            await hub.Clients.Users(userids).SendAsync("cancel", id, date.ToString("hh:mm tt"));
         }
     }
 }

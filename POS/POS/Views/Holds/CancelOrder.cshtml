@@ -1,8 +1,11 @@
-﻿@model Order
+﻿@model CancelOrderVM
 
 <form asp-action="CancelOrder" method="post">
-    <h1>ARE YOU SURE TO CANCEL ORDER <label asp-for="Id"># @Model.Id</label></h1>
-    <button class="btn btn-outline-danger" type="submit">
+    <h3>ARE YOU SURE TO CANCEL ORDER</h3>
+    <input asp-for="order.Id" class="form-control"  />
+    <h3>Branch Name</h3>
+    <input class="form-control"  asp-for="BranchName" /> 
+    <button class="btn btn-outline-danger cancelorder" type="submit">
         CANCEL ORDER
     </button>
     <button class="btn btn-dark" asp-action="Index">BACK TO HOLD</button>

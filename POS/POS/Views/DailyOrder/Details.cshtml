@@ -6,15 +6,15 @@
             <thead class="text-white">
                 <tr>
                     <th>Name</th>
-
                     <th>Size</th>
                     <th>QTTY</th>
-                    <th>UnitPrice</th>
+                    <th>UNIT PRICE</th>
+                    <th>SPICIAL NOTE</th>
                     <th>TOTAL PRICE</th>
                 </tr>
             </thead>
             <tbody class="text-muted">
-
+                
                 @foreach (var item in Model)
                 {
                     if (item.Meal.IsChild == false)
@@ -24,17 +24,21 @@
                             <td data-label="Order Service">----</td>
                             <td data-label="Order Type">@item.Quantity</td>
                             <td data-label="Order date">@item.UnitPrice</td>
+                            <td data-label="Order Note">@item.ItemNote</td>
                             <td data-label="Order Net">@(item.Quantity* item.UnitPrice)</td>
                         </tr>
                     }
                     if (item.Meal.IsChild == true)
                     {
-                       
+
                         <tr>
-                            <td data-label="Order Number"></td>
+
+
+                           <td>@item.Name</td>
                             <td data-label="Order Service">@item.Meal.Name</td>
                             <td data-label="Order Type">@item.Quantity</td>
                             <td data-label="Order date">@item.UnitPrice</td>
+                            <td data-label="Order Note">@item.ItemNote</td>
                             <td data-label="Order Net">@(item.Quantity* item.UnitPrice)</td>
                         </tr>
                     }

@@ -1,0 +1,215 @@
+﻿@model List<Message>
+<style>
+
+    /* =========== chat input  ========== */
+    .send-message {
+        padding: 15px;
+        background: #cecece;
+        height: auto;
+        position: relative;
+    }
+
+        .send-message textarea:focus {
+            box-shadow: none;
+            outline: none;
+            border-color: #ddd;
+        }
+
+        .send-message textarea {
+            padding-right: 60px;
+        }
+
+        .send-message ul li {
+            display: -webkit-inline-box;
+            padding-left: 15px;
+        }
+
+            .send-message ul li i {
+                color: #F97F46;
+            }
+
+            .send-message ul li a {
+                color: #F97F46;
+            }
+
+        .send-message ul {
+            position: absolute;
+            right: 45px;
+            top: 42%;
+            transform: translateY(-50%);
+            border-left: 1px solid #9c9a9a;
+            cursor: pointer;
+        }
+
+    .chat-person-list li {
+        transition: all .5s;
+        padding: 0px 10px;
+        cursor: pointer;
+        margin: 8px 0px;
+    }
+</style>
+<section class="py-5">
+    <div class="container-fluid">
+        <div class="row m-0">
+            @if (User.IsInRole("Admin") || User.IsInRole("CustomerService"))
+            {
+                <div class="col-lg-4 mt-4">
+                    <div class="chat-list-box">
+                        <div class="head-box d-flex justify-content-between align-items-center">
+                            <h6 class="text-white">CHAT LIST</h6>
+                        </div>
+
+                        <div class="chat-person-list p-0">
+                            <ul class="list-inline">
+
+
+                                @foreach (var item in ViewBag.Branches)
+                                {
+                                    <a asp-action="Index" asp-route-id="@item.Id" class="flip">
+                                        <li id="bran@(item.Id)">
+
+                                            <i class="fas fa-store fa-lg"></i>
+                                            <span>@item.Name</span>
+
+                                        </li>
+                                    </a>
+                                }
+
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="col-lg-8 mt-4">
+                <div class="message-box">
+                    <div class="head-box-1">
+                        <ul class="msg-box list-inline text-left d-inline-block float-left">
+                            <li> <i class="fas fa-arrow-left" id="back"></i> </li>
+                            <li>
+                                <i class="fas fa-store fa-lg"></i>
+                                <span> @ViewBag.firstbranch </span> <input style="display:none;" class="branId" value="@ViewBag.branId" /><br>
+
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="msg_history">
+                        @if (Model != null)
+                        {
+                            if (User.IsInRole("Admin") || User.IsInRole("CustomerService"))
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Branch == null)
+                                    {
+                                        <div class="incoming_msg">
+                                            <div class="received_msg">
+                                                <div class="received_withd_msg">
+                                                    <p>@item.TextMessage</p>
+                                                    <span class="time_date"> @item.MessageDate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="outgoing_msg">
+                                            <div class="sent_msg">
+                                                <p>@item.TextMessage</p>
+                                                <span class="time_date"> @item.MessageDate</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+
+                        }
+                        @if (Model != null)
+                        {
+                            if (User.IsInRole("Branch"))
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Branch == null)
+                                    {
+
+                                        <div class="outgoing_msg">
+                                            <div class="sent_msg">
+                                                <p>@item.TextMessage</p>
+                                                <span class="time_date"> @item.MessageDate</span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+
+                                        <div class="incoming_msg">
+                                            <div class="received_msg">
+                                                <div class="received_withd_msg">
+                                                    <p>@item.TextMessage</p>
+                                                    <span class="time_date"> @item.MessageDate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            }
+                        }
+                    </div>
+
+                    <div class="send-message">
+                        <form action="#">
+                            <!-- <input type="text" class="form-control" placeholder="Type your message here ..."> -->
+                            <textarea cols="10" rows="2" class="form-control text areatext" placeholder="Type your message here ..."> </textarea>
+                            <ul class="list-inline">
+                                <li><button class="btn done" type="button"><i class="fas fa-paper-plane"></i></button> </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $('.areatext').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                let message = $(".text").val();
+                let branId = $(".branId").val();
+                let date = new Date().toLocaleString();
+                let mes = ` <div class="incoming_msg">
+
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>${message}</p>
+                                    <span class="time_date">${date}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                $(".msg_history").append(mes);
+                $.ajax({
+                    url: "/Message/SaveMessage",
+                    data: { mm: message, bid: branId },
+                    method: "POST",
+                    success: function (data) {
+                        console.log(data);
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+                $(".text").val("");
+            }
+        });
+
+    </script>
+}

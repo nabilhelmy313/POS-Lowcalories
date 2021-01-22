@@ -85,10 +85,20 @@ namespace POS.Controllers
             {
                 var result = await signInManager.PasswordSignInAsync(
                     model.UserName, model.Password, model.RememberMe, false);
-
+               
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("index", "Order");
+                    var u = await userManager.FindByNameAsync(model.UserName);
+                    if (!await userManager.IsInRoleAsync(u,"Branch"))
+                    {
+                        return RedirectToAction("index", "Order");
+                    }
+                    if (await userManager.IsInRoleAsync(u, "Branch"))
+                    {
+                        return RedirectToAction("index", "Holds");
+
+                    }
+                   
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");

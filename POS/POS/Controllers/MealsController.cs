@@ -76,7 +76,7 @@ namespace POS.Controllers
             {
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Order");
             }
             return View(meal);
         }
@@ -175,7 +175,7 @@ namespace POS.Controllers
                 meal.IsChild = true;
                 _context.Add(meal);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Order");
             }
             return NotFound();
         }

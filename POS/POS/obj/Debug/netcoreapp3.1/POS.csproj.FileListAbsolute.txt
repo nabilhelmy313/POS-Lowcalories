@@ -321,3 +321,4 @@ E:\work\POS-Lowcalories\POS\POS\obj\Debug\netcoreapp3.1\Razor\Views\Account\Logi
 E:\work\POS-Lowcalories\POS\POS\bin\Debug\netcoreapp3.1\System.Net.WebSockets.WebSocketProtocol.dll
 E:\work\POS-Lowcalories\POS\POS\obj\Debug\netcoreapp3.1\Razor\Views\Holds\EditOrder.cshtml.g.cs
 E:\work\POS-Lowcalories\POS\POS\obj\Debug\netcoreapp3.1\Razor\Views\Holds\CancelOrder.cshtml.g.cs
+E:\work\POS-Lowcalories\POS\POS\obj\Debug\netcoreapp3.1\Razor\Views\Message\Index.cshtml.g.cs

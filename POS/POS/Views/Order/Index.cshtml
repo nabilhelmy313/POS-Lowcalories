@@ -8,7 +8,7 @@
                     <img src="~/layout/assets/logo.png" alt="logo" class="img-fluid">
                 </div>
                 @*CATEGORIES*@
-                <div class="row no-gutters" id="categories">
+                <div class="row no-gutters" style="overflow-y: auto;height:600px" id="categories">
                     @foreach (var item in Model.Categories)
                     {
                         <div class="col-12">
@@ -21,16 +21,7 @@
                 </div>
                 @*END CATEGORIES*@
 
-                @* BRANCH NAME *@
-                <div class="row no-gutters">
-                    <div class="col-xl-9 col-11 m-auto border-gradient radius py-1 branch">
-                        <div class="d-flex justify-content-center align-items-center py-2 text-dark ">
-                            <i class="fas fa-store mr-3"></i>
-                            <h6 class="m-0">Branch Name</h6>
-                        </div>
-                    </div>
-                </div>
-                @*END BRANCH NAME *@
+               
 
             </aside>
         </div>
@@ -49,28 +40,6 @@
                                             <button class="btn bg-gradient ml-4 mr-2 text-white radius searchmeal" style="padding: 13px 15px; vertical-align:0;">search meal</button>
                                             <input id="searchmeal" type="text" class="form-control border-gradient d-inline w-50 radius py-4" placeholder="Search For Meal">
                                             @* END SEARCH MEAL *@
-
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title text-gradient" id="exampleModalLabel">Meals</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <h5>Meal 1</h5>
-                                                            <h5>Meal 2</h5>
-                                                            <h5>Meal 3</h5>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn bg-primary text-white">SEARCH</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
 
                                         <div class="col-lg-6 py-2">
@@ -88,25 +57,12 @@
                                                         <div class="modal-body" id="custinfo">
 
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn bg-primary text-white">SEARCH</button>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <div class="col-lg-2 py-2 d-flex justify-content-center align-items-center">
-                                    <div class="text-center">
-                                        <img src="~/layout/assets/user.png" alt="user" class="img-fluid rounded-circle">
-                                        <h6 class="text-gradient">User Name</h6>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -114,22 +70,10 @@
                     <div class="row m-0">
                         <div class="col-xl-7 col-sm-9">
                             <div class="row" id="meals">
-
-
                             </div>
                         </div>
                         <div class="col-xl-2 col-sm-3 my-3 bg-gradient radius py-2" id="mealdetail">
-                            <h6 class='text-center text-white my-3'>
-                                NAME OF MEAL
-                            </h6>
-                            <div class='bg-white overflow-auto radius py-3 px-2 my-3 meal-details'>
-                                <small class='text-gradient float-left'>
-                                    <b>150 gram </b>
-                                </small>
-                                <small class='text-gradient float-right'>
-                                    <b>20 AED</b>
-                                </small>
-                            </div>
+
                         </div>
                         <div class="col-xl-3 my-3">
                             <form asp-action="SaveOrder" id="saveorder" class="order">
@@ -144,36 +88,44 @@
                                             <label class="m-0 text-gradient">TAKE AWAY</label>
                                         </div>
                                         <div class="bg-white p-1 radius d-inline-block my-1" style="width: fit-content;">
-                                            <input type="radio" name="ordertype" value="DILIVARY" class="required">
+                                            <input type="radio" name="ordertype" value="DILIVARY" class="required" >
                                             <label class="m-0 text-gradient">DILIVARY</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="mt-3" id="select-order">
-                                    <div class="form-group">
-                                        <label class="text-gradient">Branch</label>
-                                        <select class=" form-control branchid" asp-items="@(new SelectList(Model.Branches,"Id","Name"))">
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
+                                    @if (User.IsInRole("Admin") || User.IsInRole("CustomerService"))
+                                    {
+                                        <div class="form-group">
+                                            <label class="text-gradient">Branch</label>
+                                            <select class=" form-control branchid" asp-items="@(new SelectList(Model.Branches,"Id","Name"))">
+                                            </select>
+                                        </div>
+                                    }
+
+                                    <div class="form-group divbranadd">
                                         <h6 class="text-warning branaddress"></h6>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group divadd" style="display:none;">
                                         <label class="text-gradient">Address</label>
                                         <select class="form-control address">
                                         </select>
+                                    </div>
+                                    <div class="form-group divcust" >
+                                        <label class="text-gradient">Cutsomer Name</label>
+                                        <h5 class="custname">Please Search customer</h5>
                                     </div>
 
                                     <div class="form-group d-flex">
                                         <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
                                             <label style="font-size: 8px;" for="">NET</label>
-                                            <input type="text" step="any" value="0" min="0" oninput="this.value = Math.abs(this.value)" id="netInput" style="width: 38px;" class="mx-1 text-center in text-gradient border-gradient netInput">
+                                            <input disabled type="text" step="any" value="0" min="0" oninput="this.value = Math.abs(this.value)" id="netInput" style="width: 38px;" class="mx-1 text-center in text-gradient border-gradient netInput">
                                         </div>
 
                                         <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
                                             <label style="font-size: 8px;" for="">TAX</label>
-                                            <input type="text" value="0" id="taxInput" style="width: 38px;" class="mx-1 in text-center text-gradient border-gradient taxInput">
+                                            <input type="text" value="5%" id="taxInput" style="width: 38px;" class="mx-1 in text-center text-gradient border-gradient taxInput">
                                         </div>
 
                                         <div class="mx-auto justify-content-center d-flex flex-wrap align-items-center">
@@ -195,7 +147,7 @@
 
                                 <hr>
 
-                                <div id="order" style="overflow-y: scroll; overflow-x: hidden;">
+                                <div id="order" style="overflow-y: auto;height:200px; overflow-x: hidden;">
 
                                 </div>
                                 <button class="btn bg-gradient radius btn-block text-white mt-3 save" type="button" id="saveneworder">SAVE</button>
@@ -239,91 +191,128 @@
                                 var mealid = $(".mealname").attr("id");
                                 var qan = $("#" + id + 'q')[0].innerText;
                                 var pri = $("#" + id + "p")[0].innerText;
+
                                 var t = `
-                                    <div id="order-number" class="order-number overflow-auto my-4">
+                                                        <div id="order-number" class="order-number overflow-auto my-4">
 
 
-                                        <div class="order-name float-left d-flex justify-content-center align-items-center">
-                                            <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
-                                            <div class="ml-2 alldata">
-                                            <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
-                                            <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
-                                            <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                <div class="ml-2 alldata">
+                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
 
-                                            </div>
+                                                                </div>
 
-                                        </div>
-                                            <div class="counter float-right d-flex justify-content-center align-items-center">
-                                        <div class="num">1</div>
-                                        <div class="counterBtn">
-                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
-                                                <i class="fas fa-angle-up"></i>
-                                            </button>
-                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
-                                                <i class="fas fa-angle-down"></i>
-                                            </button>
-                                        </div>
-                                       
-                                    </div>
-                                        <div class="item">
-                                        <input class='form-control itmenote' type="text" placeholder="Item Note" />
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                            `;
+                                                            </div>
+                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                            <div class="num">1</div>
+                                                            <div class="counterBtn">
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                    <i class="fas fa-angle-up"></i>
+                                                                </button>
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                    <i class="fas fa-angle-down"></i>
+                                                                </button>
+                                                            </div>
+
+                                                        </div>
+                                                            <div class="item">
+                                                            <input class='form-control itmenote' type="text" placeholder="Item Note" />
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                                `;
                                 $("#order").append(t);
                                 let total = 0;
                                 let qun = 0;
                                 let p = $(".order-number .price");
                                 let vl = parseFloat($("#netInput").val());
                                 let vl2 = parseFloat($("#totalInput").val());
+
                                 for (var i = 0; i < p.length; i++) {
                                     total = parseFloat(p[i].innerText);
                                 }
+                                let tax1 = getInputTaxValue();
+
+                                let taxtotal = (tax1 * total);
+                                console.log(tax1);
+                                console.log(taxtotal);
                                 $("#netInput").val(total + vl);
-                                $("#totalInput").val(total + vl2);
+                                $("#totalInput").val(total + taxtotal + vl2);
                             });
                         });
 
                     });
                 });
             });
-
+            var isdelivery = false;
+            //ordertype check
+            $('input:radio[name="ordertype"]').change(
+                function () {
+                    if ($(this).is(':checked') && $(this).val() == 'TAKE AWAY') {
+                        $(".divadd").hide();
+                        $(".divcust").show();
+                        isdelivery = false;
+                        var phone1 = $('#custphone').val();
+                        var phone2 = $('#custphone').val();
+                        var url1 = "/Order/GetAddress";
+                        $.getJSON(url1, { phone1: phone1, phone2: phone2, isDelivery: isdelivery }, function (data) {
+                            $(".address").html(data)
+                            $(".custname").html(data);
+                        });
+                    } else {
+                        $(".divcust").hide();
+                        $(".divadd").show();
+                        isdelivery = true;
+                        var phone1 = $('#custphone').val();
+                        var phone2 = $('#custphone').val();
+                        var url1 = "/Order/GetAddress";
+                        $.getJSON(url1, { phone1: phone1, phone2: phone2, isDelivery: isdelivery }, function (data) {
+                            $(".address").html(data)
+                            $(".custname").html(data);
+                        });
+                    }
+                });
             //SAVE ORDER
             $(".save").click(function () {
-                if (!$('.address').val()) {
-                    var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
-                                                                     style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
-                                                                      <div class="card-header border-white d-flex justify-content-between align-items-center"
-                                                                       style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
-                                                                        <span class="text-white">ERROR</span>
-                                                                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                      </button>
-                                                                      </div>
-                                                                      <div class="card-body">
-                                                                        <p class="text-white">PLEASE SELECT ADDRESS</p>
-                                                                      </div>
-                                                                    </div>`;
-                    $("#saveorder").append(x);
-                    return;
-                };
+                let is = $(".divadd").is(":visible");
+                if (is) {
+                    if (!$('.address').val()) {
+                        var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
+                                                style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                <span class="text-white">ERROR</span>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="card-body">
+                                                <p class="text-white">PLEASE SELECT ADDRESS</p>
+                                                </div>
+                                            </div>`;
+                        $("#saveorder").append(x);
+                        return;
+                    };
+                }
                 var x = $("#order").children(".order-number").length
 
                 if (x == 0) {
                     var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
-                                                                     style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
-                                                                      <div class="card-header border-white d-flex justify-content-between align-items-center"
-                                                                       style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
-                                                                        <span class="text-white">ERROR</span>
-                                                                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                      </button>
-                                                                      </div>
-                                                                      <div class="card-body">
-                                                                        <p class="text-white">NO ORDER ITEM IN LIST</p>
-                                                                      </div>
-                                                                    </div>`;
+                                                        style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                        <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                <span class="text-white">ERROR</span>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="card-body">
+                                                <p class="text-white">NO ORDER ITEM IN LIST</p>
+                                                        </div>
+                                                        </div>`;
                     $("#saveorder").append(x);
                     return;
                 }
@@ -344,12 +333,13 @@
                     var mid = $(this).children('.itemname');
                     var price = $(this).children('.price');
                     var q = $(this).parents(".order-number").children(".counter").children(".num")[0].innerText;
-                    debugger;
-                    var itemnote = $(this).parents(".order-number").children(".item").children(".itemnote").val();
+
+                    var itemnote = $(this).parents(".order-number").children(".item").children(".itmenote").val();
                     orders.MealId = mid.attr("id");
                     orders.Quantity = q;
                     orders.UnitPrice = price.html();
-
+                    orders.ItemName = itemnote;
+                    orders.ItemNote = itemnote;
                     details.push(orders);
                 });
                 var model = {
@@ -366,19 +356,22 @@
                     Total: t
                 };
                 $.ajax({
-                    type: "post",
+                    type: "POST",
                     url: "/order/SaveOrder",
 
                     data: model,
                     success: function (data) {
                         window.location = '/Order/Index';
+                        console.log(data);
                     },
                     error: function (err) {
-                        alert('error' + err.responsetext);
+                        window.location = '/Order/Index';
+                        console.log('error --' + err.responsetext);
                     }
                 })
 
             });
+
             //customer serch
             $(".custsearch").click(function () {
                 var phone1 = $('#custphone').val();
@@ -387,13 +380,50 @@
                 var url1 = "/Order/GetAddress";
                 $("#custinfo").empty();
                 $(".address").empty();
+                $(".custname").empty();
                 $(".address").html("<option disabled selected>choose an address</option>");
                 $.getJSON(url, { phone1: phone1, phone2: phone2 }, function (data) {
                     $("#custinfo").html(data);
-                })
-                $.getJSON(url1, { phone1: phone1, phone2: phone2 }, function (data) {
+                    $(".phone1").val(phone1);
+
+                    //AddCustomer
+                    $(".createcustomer").click(function () {
+                        let user = $(".username").val();
+                        let firstphone = $(".phone1").val();
+                        let secondphone = $(".phone2").val();
+                        let street = $(".street").val();
+                        let foor = $(".floor").val();
+                        let flat = $(".flat").val();
+                        let landmark = $(".landmark").val();
+                        let zoonid = $(".zoon").val();
+                        let data = {
+                            Name: user,
+                            Phone1: firstphone,
+                            Phone2: secondphone,
+                            Floor: foor,
+                            Street: street,
+                            Flat: flat,
+                            Landmark: landmark,
+                            ZoonId: zoonid
+                        };
+                        $.ajax({
+                            url: "/Order/AddCustomer",
+                            data: data,
+                            method: "POST",
+                            success: function (data) {
+                                $('.modal').modal('toggle');
+                                console.log(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        })
+                    })
+                });
+                $.getJSON(url1, { phone1: phone1, phone2: phone2, isDelivery: isdelivery }, function (data) {
                     $(".address").html(data)
-                })
+                    $(".custname").html(data);
+                });
             });
             $('#custphone').keypress(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -409,8 +439,9 @@
                         $("#custinfo").html(data);
 
                     });
-                    $.getJSON(url1, { phone1: phone1, phone2: phone2 }, function (data) {
+                    $.getJSON(url1, { phone1: phone1, phone2: phone2, isDelivery: isdelivery }, function (data) {
                         $(".address").html(data)
+                        $(".custname").html(data);
                     });
                 }
             });
@@ -435,33 +466,33 @@
                                 var pri = $("#" + id + "p")[0].innerText;
 
                                 var t = `
-                                                                    <div id="order-number" class="order-number overflow-auto my-4">
+                                                                                        <div id="order-number" class="order-number overflow-auto my-4">
 
 
-                                                                        <div class="order-name float-left d-flex justify-content-center align-items-center">
-                                                                            <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
-                                                                            <div class="ml-2 alldata">
-                                                                            <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
-                                                                            <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
-                                                                            <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                                                <div class="ml-2 alldata">
+                                                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
 
-                                                                            </div>
+                                                                                                </div>
 
-                                                                        </div>
-                                                                            <div class="counter float-right d-flex justify-content-center align-items-center">
-                                                                        <div class="num">1</div>
-                                                                        <div class="counterBtn">
-                                                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
-                                                                                <i class="fas fa-angle-up"></i>
-                                                                            </button>
-                                                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
-                                                                                <i class="fas fa-angle-down"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                        <div class="clearfix"></div>
-                                                                    </div>
-                                                                          `;
+                                                                                            </div>
+                                                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                                                            <div class="num">1</div>
+                                                                                            <div class="counterBtn">
+                                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                                                    <i class="fas fa-angle-up"></i>
+                                                                                                </button>
+                                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                                                    <i class="fas fa-angle-down"></i>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                            <div class="clearfix"></div>
+                                                                                        </div>
+                                                                                              `;
                                 $("#order").append(t);
                                 let total = 0;
                                 let qun = 0;
@@ -503,33 +534,33 @@
                                     var pri = $("#" + id + "p")[0].innerText;
 
                                     var t = `
-                                                                    <div id="order-number" class="order-number overflow-auto my-4">
+                                                                                        <div id="order-number" class="order-number overflow-auto my-4">
 
 
-                                                                        <div class="order-name float-left d-flex justify-content-center align-items-center">
-                                                                            <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
-                                                                            <div class="ml-2 alldata">
-                                                                            <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
-                                                                            <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
-                                                                            <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                                                <div class="ml-2 alldata">
+                                                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
 
-                                                                            </div>
+                                                                                                </div>
 
-                                                                        </div>
-                                                                            <div class="counter float-right d-flex justify-content-center align-items-center">
-                                                                        <div class="num">1</div>
-                                                                        <div class="counterBtn">
-                                                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
-                                                                                <i class="fas fa-angle-up"></i>
-                                                                            </button>
-                                                                            <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
-                                                                                <i class="fas fa-angle-down"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                        <div class="clearfix"></div>
-                                                                    </div>
-                                                                          `;
+                                                                                            </div>
+                                                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                                                            <div class="num">1</div>
+                                                                                            <div class="counterBtn">
+                                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                                                    <i class="fas fa-angle-up"></i>
+                                                                                                </button>
+                                                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                                                    <i class="fas fa-angle-down"></i>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                            <div class="clearfix"></div>
+                                                                                        </div>
+                                                                                              `;
                                     $("#order").append(t);
                                     let total = 0;
                                     let qun = 0;
@@ -564,11 +595,12 @@
                         console.log(data);
                     }
                 })
-            })
+            });
+
             // TAX VALUE
             function getInputTaxValue() {
                 if ($('#taxInput').val().slice(-1) == '%') {
-                    let x = (Number($('#taxInput').val().slice(0, -1) / 100));
+                    let x = (parseFloat($('#taxInput').val().slice(0, -1) / 100));
                     return x;
                 } else {
                     let x = $('#taxInput').val();
@@ -661,7 +693,7 @@
                     totalCalc = Number(totalValues) - Number(discountValue);
                 }
                 if (totalCalc > 0) {
-                    $('#totalInput').val(totalCalc)
+                    $('#totalInput').val(totalCalc.toFixed(1))
                 } else {
                     $('#totalInput').val(0)
                 }
@@ -731,13 +763,13 @@
                     totalCalc = Number(totalValues) - Number(discountValue);
                 }
                 if (totalCalc > 0) {
-                    $('#totalInput').val(totalCalc)
+                    $('#totalInput').val(totalCalc.toFixed(1))
                 } else {
                     $('#totalInput').val(0)
                 }
             });
 
-            // ============================================== discountInput ================================================== 
+            // ============================================== discountInput ==================================================
 
             // calculate discount by percentage or num
             $('#discountInput').blur(() => {
@@ -800,7 +832,7 @@
                     totalCalc = Number(totalValues) - Number(discountValue);
                 }
                 if (totalCalc > 0) {
-                    $('#totalInput').val(totalCalc)
+                    $('#totalInput').val(totalCalc.toFixed(1))
                 } else {
                     $('#totalInput').val(0)
                 }
@@ -810,6 +842,17 @@
         // Counter Up
         function getCounterUp(event) {
             event.preventDefault();
+            //tax value
+            function getInputTaxValue() {
+                if ($('#taxInput').val().slice(-1) == '%') {
+                    let x = (parseFloat($('#taxInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#taxInput').val();
+                    return x.toString();
+                }
+            }
+
             let buttonUp = document.querySelectorAll(".counterUp");
             let countUp = 1;
             if (event.composedPath()[3].className == "counter float-right d-flex justify-content-center align-items-center") {
@@ -821,8 +864,15 @@
                 let netq = parseFloat(pri) * parseFloat(q);
                 let x = parseFloat($("#netInput").val()) + (netq - netqold);
                 let y = parseFloat($("#totalInput").val()) + (netq - netqold);
-                $("#netInput").val(x);
-                $("#totalInput").val(y);
+                let tax = getInputTaxValue();
+                if (tax < 1) {
+                    let taxtotal = (tax * x);
+                    $("#netInput").val(x);
+                    $("#totalInput").val((x + taxtotal).toFixed(1));
+                } else {
+                    $("#netInput").val(x);
+                    $("#totalInput").val((x + tax).toFixed(1));
+                }
 
             } else {
                 countUp = Number(event.composedPath()[2].children[0].innerText) + 1;
@@ -833,8 +883,15 @@
                 let netq = parseFloat(pri) * parseFloat(q);
                 let x = parseFloat($("#netInput").val()) + (netq - netqold);
                 let y = parseFloat($("#totalInput").val()) + (netq - netqold);
-                $("#netInput").val(x);
-                $("#totalInput").val(y);
+                let tax = getInputTaxValue();
+                if (tax < 1) {
+                    let taxtotal = (tax * x);
+                    $("#netInput").val(x);
+                    $("#totalInput").val((x + taxtotal).toFixed(1));
+                } else {
+                    $("#netInput").val(x);
+                    $("#totalInput").val((x + tax).toFixed(1));
+                }
 
 
             }
@@ -847,6 +904,17 @@
 
         // Counter Down
         function getCounterDown(event) {
+            // TAX VALUE
+            function getInputTaxValue() {
+                if ($('#taxInput').val().slice(-1) == '%') {
+                    let x = (parseFloat($('#taxInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#taxInput').val();
+                    return x.toString();
+                }
+            }
+
 
             event.preventDefault();
             let buttonDown = document.querySelectorAll(".counterDown");
@@ -863,8 +931,15 @@
                     let netq = parseFloat(pri) * parseFloat(q);
                     let x = parseFloat($("#netInput").val()) - (netq - netqold);
                     let y = parseFloat($("#totalInput").val()) - (netq - netqold);
-                    $("#netInput").val(x);
-                    $("#totalInput").val(y);
+                    let tax = getInputTaxValue();
+                    if (tax < 1) {
+                        let taxtotal = (tax * x);
+                        $("#netInput").val(x);
+                        $("#totalInput").val((x + taxtotal).toFixed(1));
+                    } else {
+                        $("#netInput").val(x);
+                        $("#totalInput").val((x + tax).toFixed(1));
+                    }
                 }
 
 
@@ -879,8 +954,16 @@
                     let netq = parseFloat(pri) * parseFloat(q);
                     let x = parseFloat($("#netInput").val()) - (netq - netqold);
                     let y = parseFloat($("#totalInput").val()) - (netq - netqold);
-                    $("#netInput").val(x);
-                    $("#totalInput").val(y);
+                    let tax = getInputTaxValue();
+                    if (tax < 1) {
+                        let taxtotal = (tax * x);
+                        $("#netInput").val(x);
+                        $("#totalInput").val((x + taxtotal).toFixed(1));
+                    } else {
+                        $("#netInput").val(x);
+                        $("#totalInput").val((x + tax).toFixed(1));
+                    }
+
 
                 }
 
@@ -892,26 +975,32 @@
         }
         //delete item
         function deleteOrder(event) {
-            //let total = 0;
-            //let qun = 0;
-            //let vl = parseFloat($("#netInput").val());
-
-            //let p = $(".order-number .price");
-            //for (var i = 0; i < p.length; i++) {
-            //    total = parseFloat(p[i].innerText);
-            //};
-            //let q = $(".order-number .num");
-            //for (let y = 0; y < q.length; y++) {
-            //    qun = parseFloat(q[i].innerText);
-            //};
-            //alert(qun);
+            // TAX VALUE
+            function getInputTaxValue() {
+                if ($('#taxInput').val().slice(-1) == '%') {
+                    let x = (parseFloat($('#taxInput').val().slice(0, -1) / 100));
+                    return x;
+                } else {
+                    let x = $('#taxInput').val();
+                    return x.toString();
+                }
+            }
             let q = event.composedPath()[2].children[1].children[0].innerText;
             let p = event.composedPath()[2].children[0].children[1].children[2].innerText;
             let tot = parseFloat(q) * parseFloat(p);
-            let total = parseFloat($("#netInput").val() - tot);
+            let x = parseFloat($("#netInput").val() - tot);
             let total1 = parseFloat($("#totalInput").val() - tot);
-            $("#netInput").val(total);
-            $("#totalInput").val(total1);
+            //$("#netInput").val(total);
+            //$("#totalInput").val(total1);
+            let tax = getInputTaxValue();
+            if (tax < 1) {
+                let taxtotal = (tax * x);
+                $("#netInput").val(x);
+                $("#totalInput").val((x + taxtotal).toFixed(1));
+            } else {
+                $("#netInput").val(x);
+                $("#totalInput").val((x + tax).toFixed(1));
+            }
             event.composedPath()[2].remove();
         }
 

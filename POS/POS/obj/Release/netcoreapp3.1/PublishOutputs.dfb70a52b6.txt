@@ -1,15 +1,20 @@
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\POS.exe
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\80921__justinbw__buttonchime02up.wav
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\css\nice-select.css
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\favicon.ico
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\got-it-done-613.mp3
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\5b1b0f02-4d56-4ea8-8a08-83fe8e83ed2d_Screenshot (6).png
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\5ef100aa-1ede-45a5-832d-bac724814336_Beautiful Photography Ultra HD 4K Wallpapers (41).jpg
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\78925dd3-48ff-4025-bd1b-7fb38562a8fd_WhatsApp Image 2020-12-21 at 9.32.50 PM(1).jpeg
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\9e54d4d3-34e5-41c8-9a7c-22f1f5aa97b3_Screenshot (5).png
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\a74042ea-f051-4a85-8de1-330ab74e28f0_Screenshot (5).png
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\b21d8707-ced1-4201-a98e-e4e531c6dccf_WhatsApp Image 2020-12-21 at 9.32.50 PM(1).jpeg
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\b6dbf8ba-3343-437e-919b-bc90b6292106_Beautiful Photography Ultra HD 4K Wallpapers (3).jpg
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\b791f135-93da-4441-814f-b014ff48f930_Beautiful Photography Ultra HD 4K Wallpapers (36).jpg
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\bb29dd06-e45f-48e5-85d4-508387f29cde_Screenshot (6).png
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\dc56c289-159d-4ac4-a445-8896f61523c2_WhatsApp Image 2020-12-21 at 9.32.27 PM.jpeg
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\images\logo.png
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\jQuery.print.js
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\js\site.js
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\layout\assets\icons\favicon.ico
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\layout\assets\img-01.png

@@ -43,7 +43,7 @@
                     @foreach (var i in Model.Roles)
                     {
                         <div class="bg-white p-1 radius d-inline-block my-1" style="width: fit-content;">
-                            <input asp-for="RoleId" type="radio" value="@i.Name" class="required">
+                            <input asp-for="RoleId" type="radio" value="@i.Name"  class="required" checked>
                             <label class="m-0 text-gradient">@i.Name</label>
                         </div>
                     }

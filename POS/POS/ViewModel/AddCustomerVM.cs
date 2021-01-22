@@ -13,7 +13,6 @@ namespace POS.ViewModel
         public IEnumerable<Zoon> Zoons { get; set; }
         public int ZoonId { get; set; }
         public string Floor { get; set; }
-        [Required(ErrorMessage ="Please Enter Street Of Customer")]
         public string Street { get; set; }
         public string Flat { get; set; }
         public string Landmark { get; set; }

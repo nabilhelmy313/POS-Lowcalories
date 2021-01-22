@@ -22,7 +22,7 @@ namespace POS.Controllers
         private readonly UserManager<ApplicationUser> userManager;
 
         public OrderController(ApplicationDbContext context,
-            IHubContext<NotificationHub>hub,UserManager<ApplicationUser>userManager)
+            IHubContext<NotificationHub> hub, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             this.hub = hub;
@@ -221,7 +221,72 @@ namespace POS.Controllers
         [HttpGet]
         public JsonResult GetCustomer(string? phone1, string? phone2)
         {
-            string html = "<div class='alert alert-warning d-flex justify-content-center' role='alert'><span class='mr-5'>CUSTOMER NOT FOUND</span> <a class='btn btn-outline-warning ml-5' href='/Customers/Create'><i class='fas fa-user-plus'></i>ADD NEW CUSTOMER</a></ div > ";
+            var zoons = _context.Zoons.ToList();
+            string zoonlist = "";
+            List<string> options = new List<string>();
+            foreach (var item in zoons)
+            {
+                options.Add("<option value='" + item.Id + "'>" + item.Name + "</option>");
+            }
+            foreach (var item in options)
+            {
+                zoonlist = item;
+            };
+            string html = @"
+            <section id='createCustomer'>
+               <div class='container py-3'>
+              <form asp-action='Create' enctype='multipart/form-data' class='row mx-2'>
+
+
+                <div class='col-12'>
+                <label class='text-gradient font-weight-bold'>User Name</label>
+                <input  type='text' class='username form-control'>
+                <span class='text-danger mt-1'></span>
+                </div>
+
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'>PHONE</label>
+                    <input type='text' class='phone1 form-control'>
+                    <span  class=' text-danger mt-1'></span> 
+
+                </div>
+
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'> ANOTHR PHONE</label>
+                    <input type='text' class='phone2 form-control'>
+                </div>
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'>STREET</label>
+                    <input type='text' class='street form-control'>
+                    <span class='text-danger mt-1'></span>
+
+                </div>
+
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'>FLOOR</label>
+                    <input type='text' class='floor form-control'>
+                </div>
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'>FLAT</label>
+                    <input type='text' class='flat form-control'>
+                </div>
+                <div class='col-6'>
+                    <label class='text-gradient font-weight-bold'>LANDMARK</label>
+                    <input type='text' class='landmark form-control'>
+                </div>
+                <div class='col-6'>
+                <label class='text-gradient font-weight-bold'>AREA</label>
+                <select  class='zoon form-control  text-gradient2'>
+                  <option value='0'>No Area</option>
+                " + string.Join(" ", options) +
+                @"</select>
+                </div >
+            <button type='button' class='btn btn-block bg-gradient text-white mt-3 createcustomer'>Create</button>
+            </form>
+          </div>
+        </section>
+                   
+";
             StringBuilder builder1 = new StringBuilder();
             builder1.AppendFormat(html);
             if (phone1 == null && phone2 == null)
@@ -247,7 +312,7 @@ namespace POS.Controllers
                                <hr> ";
                 string add = "<h6 class='text-muted'><i class='fas fa-home text-gradient pr-3 pl-1'></i>  AREA : <span>{0}</span> STREET : <span>{1}</span> FLOOR : <span>{2}</span> FLAT :<span>{3}</span></h6>";
                 string oo = "<hr/><h6 class='text-muted'><i class='fas fa-pizza-slice text-gradient pr-3 pl-1'></i> ORDER DATE :{0} </h6>";
-                string oo1 = "<option value='{0}'>{1}</option>"; 
+                string oo1 = "<option value='{0}'>{1}</option>";
                 StringBuilder builder = new StringBuilder();
                 StringBuilder builderlist = new StringBuilder();
                 StringBuilder orderist = new StringBuilder();
@@ -264,9 +329,34 @@ namespace POS.Controllers
             }
             return Json(builder1.ToString());
         }
-        public JsonResult GetAddress(string? phone1, string? phone2)
+        [HttpPost]
+        public JsonResult AddCustomer(AddCustomerVM vM)
         {
-            if (phone1!=null)
+            Customer customer = new Customer();
+            customer.Name = vM.Name;
+            customer.Phone1 = vM.Phone1;
+            customer.Phone2 = vM.Phone2;
+            _context.Add(customer);
+            _context.SaveChanges();
+
+            var zoon = _context.Zoons.Find(vM.ZoonId);
+            if (zoon!=null)
+            {
+                Address address = new Address();
+                address.Flat = vM.Flat;
+                address.Floor = vM.Floor;
+                address.Landmark = vM.Landmark;
+                address.Street = vM.Street;
+                address.Zoon = zoon;
+                address.Customer = customer;
+                _context.Add(address);
+                _context.SaveChanges();
+            }
+            return Json("Done");
+        }
+        public JsonResult GetAddress(string? phone1, string? phone2, bool isDelivery)
+        {
+            if (phone1 != null)
             {
                 var cust = _context.Customers.Where(p => p.Phone1 == phone1.ToString() || p.Phone2 == phone2.ToString()).FirstOrDefault();
                 var address = _context.Addresses.Include(z => z.Zoon).
@@ -278,33 +368,42 @@ namespace POS.Controllers
                     OrderViewModel model = new OrderViewModel
                     {
                         Addresses = address,
+                        Customer = _context.Customers.Where(c => c.Phone1 == phone1 || c.Phone2 == phone2).FirstOrDefault(),
                         Orders = _context.Orders.Where(c => c.CustPhone == phone1 || c.CustPhone == phone2).OrderByDescending(o => o.OrderDate).ToList(),
                     };
                     StringBuilder adddrop = new StringBuilder();
-                    string oo1 = "<option value='{0}'>{1}</option>"; ;
-                    model.Addresses.ForEach(o =>
-                           adddrop.AppendFormat(oo1, o.Id, o.Street + " " + o.Floor + " " + o.Flat));
+                    if (isDelivery == true)
+                    {
+                        string oo1 = "<option value='{0}'>{1}</option>"; ;
+                        model.Addresses.ForEach(o =>
+                               adddrop.AppendFormat(oo1, o.Id, o.Street + " - " + o.Floor + " - " + o.Flat));
 
-                    return Json(adddrop.ToString());
+                        return Json(adddrop.ToString());
+
+                    }
+                    else
+                    {
+                        string oo1 = "{0}"; ;
+                        adddrop.AppendFormat(oo1, model.Customer.Name);
+                        return Json(adddrop.ToString());
+                    }
                 }
             }
-            
-            return Json("Empty");
+
+            return Json("Please Search customer");
         }
         //branch address
         public JsonResult BranchAddress(int branchid)
         {
 
             var x = _context.Branches.Find(branchid).Address;
-            if (x==null)
+            if (x == null)
             {
                 return Json("Empty Address");
             }
             else
             {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.AppendFormat(x);
-                return Json(stringBuilder.ToString());
+                return Json(x);
 
             }
         }
@@ -312,26 +411,36 @@ namespace POS.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveOrder(orderVM orderVM)
         {
-            var user =await userManager.FindByIdAsync(orderVM.UserId);
+            var user = await userManager.FindByIdAsync(orderVM.UserId);
             Order order = new Order();
             order.Status = 0;
             order.Type = orderVM.Type;
             order.OrderDate = DateTime.Now;
-            Branch branch =_context.Branches.Where(i => i.Id == orderVM.BranchId).FirstOrDefault();
-            order.Branch = branch;
+            Branch branch = new Branch();
+            if (orderVM.BranchId == 0)
+            {
+                 branch = _context.Branches.Where(b => b.Name == user.Branch).FirstOrDefault();
+                order.Branch = branch;
+
+            }
+            else
+            {
+                branch = _context.Branches.Where(i => i.Id == orderVM.BranchId).FirstOrDefault();
+                order.Branch = branch;
+            }
             var address = _context.Addresses.Where(a => a.Id == orderVM.AddressId).FirstOrDefault();
             order.Address = address;
             order.Net = orderVM.Net;
-            if (orderVM.Service <1)
-                order.Service =orderVM.Net- (orderVM.Service * 100);
+            if (orderVM.Service < 1)
+                order.Service = (orderVM.Service * orderVM.Net);
             else
                 order.Service = orderVM.Service;
             if (orderVM.Tax < 1)
-                order.Tax = orderVM.Net - (orderVM.Tax * 100);
+                order.Tax = (orderVM.Tax * orderVM.Net);
             else
                 order.Tax = orderVM.Tax;
             if (orderVM.Discount < 1)
-                order.Discount = orderVM.Net - (orderVM.Discount * 100);
+                order.Discount = (orderVM.Discount * orderVM.Net);
             else
                 order.Discount = orderVM.Discount;
             order.Total = orderVM.Total;
@@ -340,23 +449,45 @@ namespace POS.Controllers
             _context.Add(order);
             await _context.SaveChangesAsync();
             int oid = order.Id;
+
             foreach (var item in orderVM.OrderdetailVMs)
             {
                 OrderDetail orderDetail = new OrderDetail();
                 Meal meal = _context.Meals.Where(m => m.Id == item.MealId).FirstOrDefault();
                 orderDetail.Meal = meal;
+                if (meal.IsChild==false)
+                    orderDetail.Name = meal.Name;
+                else
+                    orderDetail.Name = _context.Meals.Where(m => m.Id == meal.ParentId).FirstOrDefault().Name;
+                
                 orderDetail.Order = _context.Orders.Where(o => o.Id == oid).FirstOrDefault();
                 orderDetail.Quantity = item.Quantity;
-                orderDetail.ItemNote = item.ItemNote;
+                orderDetail.ItemNote = item.ItemName;
                 orderDetail.UnitPrice = item.UnitPrice;
                 _context.Add(orderDetail);
                 await _context.SaveChangesAsync();
             }
-            await hub.Clients.All.SendAsync("NewOrder", oid
-            , order.OrderDate);
+            await SendMessage(oid, order.OrderDate, branch.Name);
+            OrderViewModel viewModel = new OrderViewModel
+            {
+                Categories = _context.Categories.ToList(),
+                Branches = _context.Branches.ToList(),
+                UserId = userManager.GetUserId(HttpContext.User)
+            };
+            return View(viewModel);
 
-
-            return RedirectToAction(nameof(Index));
+          
+        }
+        public async Task SendMessage(int id,DateTime date,string branch)
+        {
+           
+            var users = userManager.Users.Where(b=>b.Branch== branch).ToList();
+            List<string> userids = new List<string>();
+            foreach (var item in users)
+            {
+                userids.Add(item.Id);
+            }
+            await hub.Clients.Users(userids).SendAsync("NewOrder", id,date.ToString("hh:mm tt"));
         }
     }
 }

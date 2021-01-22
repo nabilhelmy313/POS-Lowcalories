@@ -53,39 +53,43 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
+   
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
-    //customer serch
-    $(".custsearch").click(function () {
-        if (!$("#custsearch").val()) {
-            var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
-                                                 style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
-                                                  <div class="card-header border-white d-flex justify-content-between align-items-center"
-                                                   style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
-                                                    <span class="text-white">ERROR</span>
-                                                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                                  </div>
-                                                  <div class="card-body">
-                                                    <p class="text-white">PLEASE Enter Phone Number</p>
-                                                  </div>
-                                                </div>`;
-            $("#Error").append(x);
-            return;
-        }
-        var phone1 = $("#custsearch").val();
-        var phone2 = $('#custsearch').val();
-        var url = "/Addresses/GetCustomer";
-        $("#custinfo").empty();
-        $.getJSON(url, { phone1: phone1, phone2: phone2 }, function (data) {
-            $("#custinfo").html(data);
+    <script>
+        //customer serch
+        $(".custsearch").click(function () {
+            if (!$("#custsearch").val()) {
+                var x = `<div class="alert alert-dismissible fixed-bottom radius text-white border-0" id="successSave"
+                                                     style="width: fit-content; left: auto; right: 20px; bottom: auto; top: 20px; background: linear-gradient(180deg,#F97F4690 0,#f7497290);">
+                                                      <div class="card-header border-white d-flex justify-content-between align-items-center"
+                                                       style="border-top-left-radius: 14px !important; border-top-right-radius: 14px !important">
+                                                        <span class="text-white">ERROR</span>
+                                                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                      </div>
+                                                      <div class="card-body">
+                                                        <p class="text-white">PLEASE Enter Phone Number</p>
+                                                      </div>
+                                                    </div>`;
+                $("#Error").append(x);
+                return;
+            }
+            var phone1 = $("#custsearch").val();
+            var phone2 = $('#custsearch').val();
+            var url = "/Addresses/GetCustomer";
+            $("#custinfo").empty();
+            $.getJSON(url, { phone1: phone1, phone2: phone2 }, function (data) {
+                $("#custinfo").html(data);
+            });
+
+
         });
+
         
-    });
-</script>
+    </script>
 }
