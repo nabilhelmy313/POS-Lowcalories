@@ -217,21 +217,98 @@ namespace POS.Controllers
             }
             return Json("error");
         }
+        //Get address Form
+        public JsonResult AddressForm(string CustPhone)
+        {
+            if (CustPhone != null)
+            {
+                var customer = _context.Customers.Where(c => c.Phone1 == CustPhone || c.Phone2 == CustPhone).FirstOrDefault();
+                if (customer != null)
+                {
+
+
+                    var zoons = _context.Zoons.ToList();
+                    List<string> options = new List<string>();
+                    foreach (var item in zoons)
+                    {
+                        options.Add("<option value='" + item.Id + "'>" + item.Name + "</option>");
+                    }
+                    string html = @"
+                        <section id='createCustomer'>
+                           <div class='container py-3'>
+                          <form asp-action='Create' enctype='multipart/form-data' class='row mx-2'>
+
+
+                            <div class='col-12'>
+                            <label class='text-gradient font-weight-bold'>User Name</label>
+                            <input  type='text' class='username form-control' value='" + customer.Name + @"' disabled>
+                            <span class='text-danger mt-1'></span>
+                            </div>
+
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'>PHONE</label>
+                                <input type='text'  class='phone1 form-control' value='" + customer.Phone1 + @"' disabled>
+                                <span  class=' text-danger mt-1'></span> 
+
+                            </div>
+
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'> ANOTHR PHONE</label>
+                                <input type='text' class='phone2 form-control' value='" + customer.Phone2 + @"' disabled>
+                            </div>
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'>STREET</label>
+                                <input type='text' class='street form-control'>
+                                <span class='text-danger mt-1'></span>
+
+                            </div>
+
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'>FLOOR</label>
+                                <input type='text' class='floor form-control'>
+                            </div>
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'>FLAT</label>
+                                <input type='text' class='flat form-control'>
+                            </div>
+                            <div class='col-6'>
+                                <label class='text-gradient font-weight-bold'>LANDMARK</label>
+                                <input type='text' class='landmark form-control'>
+                            </div>
+                            <div class='col-6'>
+                            <label class='text-gradient font-weight-bold'>AREA</label>
+                            <select  class='zoon form-control  text-gradient2'>
+                              <option value='0'>No Area</option>
+                            " + string.Join(" ", options) +
+                                    @"</select>
+                            </div >
+                        <button type='button' class='btn btn-block bg-gradient text-white mt-3 createcustomer'>Create</button>
+                        </form>
+                      </div>
+                    </section>
+                     ";
+                    StringBuilder builder1 = new StringBuilder();
+                    builder1.AppendFormat(html);
+                    return Json(builder1.ToString());
+                }
+                else
+                {
+                    return Json("Please Add The New Customer");
+
+                }
+            }
+            return Json("Please Put Customer Number");
+        }
         //GET CUSTOMER
         [HttpGet]
         public JsonResult GetCustomer(string? phone1, string? phone2)
         {
             var zoons = _context.Zoons.ToList();
-            string zoonlist = "";
             List<string> options = new List<string>();
             foreach (var item in zoons)
             {
                 options.Add("<option value='" + item.Id + "'>" + item.Name + "</option>");
             }
-            foreach (var item in options)
-            {
-                zoonlist = item;
-            };
             string html = @"
             <section id='createCustomer'>
                <div class='container py-3'>
@@ -332,27 +409,49 @@ namespace POS.Controllers
         [HttpPost]
         public JsonResult AddCustomer(AddCustomerVM vM)
         {
-            Customer customer = new Customer();
-            customer.Name = vM.Name;
-            customer.Phone1 = vM.Phone1;
-            customer.Phone2 = vM.Phone2;
-            _context.Add(customer);
-            _context.SaveChanges();
-
-            var zoon = _context.Zoons.Find(vM.ZoonId);
-            if (zoon!=null)
+            var custexist = _context.Customers.Where(c => c.Phone1 == vM.Phone1 || c.Phone2 == vM.Phone2).FirstOrDefault();
+            if (custexist == null)
             {
-                Address address = new Address();
-                address.Flat = vM.Flat;
-                address.Floor = vM.Floor;
-                address.Landmark = vM.Landmark;
-                address.Street = vM.Street;
-                address.Zoon = zoon;
-                address.Customer = customer;
-                _context.Add(address);
+
+                Customer customer = new Customer();
+                customer.Name = vM.Name;
+                customer.Phone1 = vM.Phone1;
+                customer.Phone2 = vM.Phone2;
+                _context.Add(customer);
                 _context.SaveChanges();
+
+                var zoon = _context.Zoons.Find(vM.ZoonId);
+                if (zoon != null)
+                {
+                    Address address = new Address();
+                    address.Flat = vM.Flat;
+                    address.Floor = vM.Floor;
+                    address.Landmark = vM.Landmark;
+                    address.Street = vM.Street;
+                    address.Zoon = zoon;
+                    address.Customer = customer;
+                    _context.Add(address);
+                    _context.SaveChanges();
+                }
+            }
+            else
+            {
+                var zoon = _context.Zoons.Find(vM.ZoonId);
+                if (zoon != null)
+                {
+                    Address address = new Address();
+                    address.Flat = vM.Flat;
+                    address.Floor = vM.Floor;
+                    address.Landmark = vM.Landmark;
+                    address.Street = vM.Street;
+                    address.Zoon = zoon;
+                    address.Customer = custexist;
+                    _context.Add(address);
+                    _context.SaveChanges();
+                }
             }
             return Json("Done");
+
         }
         public JsonResult GetAddress(string? phone1, string? phone2, bool isDelivery)
         {
@@ -419,7 +518,7 @@ namespace POS.Controllers
             Branch branch = new Branch();
             if (orderVM.BranchId == 0)
             {
-                 branch = _context.Branches.Where(b => b.Name == user.Branch).FirstOrDefault();
+                branch = _context.Branches.Where(b => b.Name == user.Branch).FirstOrDefault();
                 order.Branch = branch;
 
             }
@@ -455,11 +554,11 @@ namespace POS.Controllers
                 OrderDetail orderDetail = new OrderDetail();
                 Meal meal = _context.Meals.Where(m => m.Id == item.MealId).FirstOrDefault();
                 orderDetail.Meal = meal;
-                if (meal.IsChild==false)
+                if (meal.IsChild == false)
                     orderDetail.Name = meal.Name;
                 else
                     orderDetail.Name = _context.Meals.Where(m => m.Id == meal.ParentId).FirstOrDefault().Name;
-                
+
                 orderDetail.Order = _context.Orders.Where(o => o.Id == oid).FirstOrDefault();
                 orderDetail.Quantity = item.Quantity;
                 orderDetail.ItemNote = item.ItemName;
@@ -476,18 +575,18 @@ namespace POS.Controllers
             };
             return View(viewModel);
 
-          
+
         }
-        public async Task SendMessage(int id,DateTime date,string branch)
+        public async Task SendMessage(int id, DateTime date, string branch)
         {
-           
-            var users = userManager.Users.Where(b=>b.Branch== branch).ToList();
+
+            var users = userManager.Users.Where(b => b.Branch == branch).ToList();
             List<string> userids = new List<string>();
             foreach (var item in users)
             {
                 userids.Add(item.Id);
             }
-            await hub.Clients.Users(userids).SendAsync("NewOrder", id,date.ToString("hh:mm tt"));
+            await hub.Clients.Users(userids).SendAsync("NewOrder", id, date.ToString("hh:mm tt"));
         }
     }
 }

@@ -169,11 +169,11 @@
                                                 <h6 class="m-0" style="font-size: 14px;" id="@item.Meal.Id" data-topass="@item.Name">@item.Name</h6>
                                                 <p class="text-muted itemname" id="@item.Meal.Id" data-topass="@item.Meal.Name">@item.Meal.Name</p>
                                                 <span class="text-muted price" data-topass="@item.UnitPrice">@item.UnitPrice</span><span class="text-muted"> AED</span>
-
+                                                <span id="q@(item.Meal.Id)" hidden></span>
                                             </div>
                                         </div>
                                         <div class="counter float-right d-flex justify-content-center align-items-center">
-                                            <div class="num">@item.Quantity</div>
+                                            <div class="num" id="num@(item.Meal.Id)">@item.Quantity</div>
                                             <div class="counterBtn">
                                                 <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
                                                     <i class="fas fa-angle-up"></i>
@@ -242,12 +242,12 @@
                                                                 <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
                                                                 <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
                                                                 <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
-
+                                                                <span id="q${id}" hidden></span>
                                                                 </div>
 
                                                             </div>
                                                                 <div class="counter float-right d-flex justify-content-center align-items-center">
-                                                            <div class="num">1</div>
+                                                            <div class="num" id="num${id}">1</div>
                                                             <div class="counterBtn">
                                                                 <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
                                                                     <i class="fas fa-angle-up"></i>
@@ -264,7 +264,16 @@
                                                             <div class="clearfix"></div>
                                                         </div>
                                                                 `;
-                                $("#order").append(t);
+                                let itemname = $("#q" + id).length;
+                                if (itemname != 0) {
+
+                                    let qannumadd = $("#num" + id).html();
+                                    let newqun = (parseFloat(qannumadd) + 1);
+                                    $("#num" + id).html(newqun);
+                                }
+                                else {
+                                    $("#order").append(t);
+                                }
                                 let total = 0;
                                 let qun = 0;
                                 let p = $(".order-number .price");
@@ -498,34 +507,47 @@
                                 var pri = $("#" + id + "p")[0].innerText;
 
                                 var t = `
-                                        <div id="order-number" class="order-number overflow-auto my-4">
+                                                        <div id="order-number" class="order-number overflow-auto my-4">
 
 
-                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
-                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
-                                                <div class="ml-2 alldata">
-                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
-                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
-                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                <div class="ml-2 alldata">
+                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                                <span id="q${id}" hidden></span>
+                                                                </div>
 
-                                                </div>
+                                                            </div>
+                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                            <div class="num" id="num${id}">1</div>
+                                                            <div class="counterBtn">
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                    <i class="fas fa-angle-up"></i>
+                                                                </button>
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                    <i class="fas fa-angle-down"></i>
+                                                                </button>
+                                                            </div>
 
-                                            </div>
-                                                <div class="counter float-right d-flex justify-content-center align-items-center">
-                                            <div class="num">1</div>
-                                            <div class="counterBtn">
-                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
-                                                    <i class="fas fa-angle-up"></i>
-                                                </button>
-                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
-                                                    <i class="fas fa-angle-down"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                                `;
-                                $("#order").append(t);
+                                                        </div>
+                                                            <div class="item">
+                                                            <input class='form-control itmenote' type="text" placeholder="Item Note" />
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                                `;
+                                let itemname = $("#q" + id).length;
+                                if (itemname != 0) {
+
+                                    let qannumadd = $("#num" + id).html();
+                                    let newqun = (parseFloat(qannumadd) + 1);
+                                    $("#num" + id).html(newqun);
+                                }
+                                else {
+                                    $("#order").append(t);
+                                }
                                 let total = 0;
                                 let qun = 0;
                                 let p = $(".order-number .price");
@@ -566,34 +588,47 @@
                                     var pri = $("#" + id + "p")[0].innerText;
 
                                     var t = `
-                                                <div id="order-number" class="order-number overflow-auto my-4">
+                                                        <div id="order-number" class="order-number overflow-auto my-4">
 
 
-                                                    <div class="order-name float-left d-flex justify-content-center align-items-center">
-                                                        <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
-                                                        <div class="ml-2 alldata">
-                                                        <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
-                                                        <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
-                                                        <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                            <div class="order-name float-left d-flex justify-content-center align-items-center">
+                                                                <i class="far fa-trash-alt text-gradient pointer del" onclick='deleteOrder(event)'></i>
+                                                                <div class="ml-2 alldata">
+                                                                <h6 class="m-0" style="font-size: 14px;" id="${mealid}" data-topass="${mealname}">${mealname}</h6>
+                                                                <p class="text-muted itemname" id="${id}" data-topass="${qan}">${qan}</p>
+                                                                <span class="text-muted price" data-topass="${pri}">${pri}</span><span class="text-muted"> AED</span>
+                                                                <span id="q${id}" hidden></span>
+                                                                </div>
+
+                                                            </div>
+                                                                <div class="counter float-right d-flex justify-content-center align-items-center">
+                                                            <div class="num" id="num${id}">1</div>
+                                                            <div class="counterBtn">
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
+                                                                    <i class="fas fa-angle-up"></i>
+                                                                </button>
+                                                                <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
+                                                                    <i class="fas fa-angle-down"></i>
+                                                                </button>
+                                                            </div>
 
                                                         </div>
+                                                            <div class="item">
+                                                            <input class='form-control itmenote' type="text" placeholder="Item Note" />
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                                `;
+                                    let itemname = $("#q" + id).length;
+                                    if (itemname != 0) {
 
-                                                    </div>
-                                                        <div class="counter float-right d-flex justify-content-center align-items-center">
-                                                    <div class="num">1</div>
-                                                    <div class="counterBtn">
-                                                        <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterUp" onclick='getCounterUp(event)'>
-                                                            <i class="fas fa-angle-up"></i>
-                                                        </button>
-                                                        <button type="button" class="btn bg-gradient text-white d-block py-0 px-2 counterDown" onclick='getCounterDown(event)'>
-                                                            <i class="fas fa-angle-down"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                        `;
-                                    $("#order").append(t);
+                                        let qannumadd = $("#num" + id).html();
+                                        let newqun = (parseFloat(qannumadd) + 1);
+                                        $("#num" + id).html(newqun);
+                                    }
+                                    else {
+                                        $("#order").append(t);
+                                    }
                                     let total = 0;
                                     let qun = 0;
                                     let p = $(".order-number .price");

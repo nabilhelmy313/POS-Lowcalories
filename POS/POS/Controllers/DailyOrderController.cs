@@ -58,47 +58,112 @@ namespace POS.Controllers
         {
             if (User.IsInRole("Admin")||User.IsInRole("CustomerService"))
             {
-                if (date.BranchId == 0)
+                
+                if (date.CustPhone==null && date.BranchId == 0)
                 {
                     DailyOrderVM vM = new DailyOrderVM()
                     {
                         Branches = _context.Branches.ToList(),
                         Serchdate = date.Serchdate,
-                        Orders = _context.Orders.Where(s => s.Status == 3 && s.OrderDate.Date == date.Serchdate.Date).OrderByDescending(o => o.OrderDate).ToList(),
+                        Orders = _context.Orders.
+                        Where(s => s.Status == 3 
+                        && s.OrderDate.Date == date.Serchdate.Date).
+                        OrderByDescending(o => o.OrderDate).ToList(),
+                    };
+                   
+                    ViewBag.total = vM.Orders.Sum(t => t.Total);
+                    return View("Index", vM);
+                }
+                else if (date.CustPhone != null && date.BranchId != 0)
+                {
+
+                    DailyOrderVM vM = new DailyOrderVM()
+                    {
+                        Branches = _context.Branches.ToList(),
+                        Serchdate = date.Serchdate,
+                        Orders = _context.Orders.Include(b => b.Branch)
+                        .Where(s => s.Status == 3 &&
+                        s.OrderDate.Date == date.Serchdate.Date &&
+                        s.CustPhone == date.CustPhone &&
+                        s.Branch== _context.Branches.Find(date.BranchId)
+                        )
+                        .OrderByDescending(o => o.OrderDate).ToList(),
                     };
                     ViewBag.total = vM.Orders.Sum(t => t.Total);
                     return View("Index", vM);
                 }
-                else
+
+                else if (date.CustPhone != null && date.BranchId == 0)
+                {
+                   
+                    DailyOrderVM vM = new DailyOrderVM()
+                    {
+                        Branches = _context.Branches.ToList(),
+                        Serchdate = date.Serchdate,
+                        Orders = _context.Orders.Include(b => b.Branch)
+                        .Where(s => s.Status == 3 &&
+                        s.OrderDate.Date == date.Serchdate.Date &&
+                        s.CustPhone == date.CustPhone 
+                        )
+                        .OrderByDescending(o => o.OrderDate).ToList(),
+                    };
+                    ViewBag.total = vM.Orders.Sum(t => t.Total);
+                    return View("Index", vM);
+                }
+                else if (date.CustPhone == null && date.BranchId != 0)
                 {
                     DailyOrderVM vM = new DailyOrderVM()
                     {
                         Branches = _context.Branches.ToList(),
                         Serchdate = date.Serchdate,
                         Orders = _context.Orders.Include(b=>b.Branch)
-                        .Where(s => s.Status == 3 && s.OrderDate.Date == date.Serchdate.Date && s.Branch == _context.Branches.Find(date.BranchId))
+                        .Where(s => s.Status == 3 &&
+                        s.OrderDate.Date == date.Serchdate.Date &&
+                        s.Branch == _context.Branches.Find(date.BranchId))
                         .OrderByDescending(o => o.OrderDate).ToList(),
                     };
                     ViewBag.total = vM.Orders.Sum(t => t.Total);
                     return View("Index", vM);
                 }
+                return View();
             }
             else
             {
                 var userid = userManager.GetUserId(HttpContext.User);
                 var user = await userManager.FindByIdAsync(userid);
-                
+                if (date.CustPhone != null)
+                {
                     DailyOrderVM vM = new DailyOrderVM()
                     {
                         Branches = _context.Branches.ToList(),
                         Serchdate = date.Serchdate,
-                        Orders = _context.Orders.Include(b=>b.Branch).
-                        Where(s => s.Status == 3 && s.OrderDate.Date == date.Serchdate.Date&&s.Branch.Name==user.Branch)
+                        Orders = _context.Orders.Include(b => b.Branch).
+                        Where(s => s.Status == 3 &&
+                        s.OrderDate.Date == date.Serchdate.Date &&
+                        s.Branch.Name == user.Branch &&
+                        s.CustPhone==date.CustPhone
+                        )
                         .OrderByDescending(o => o.OrderDate).ToList(),
                     };
                     ViewBag.total = vM.Orders.Sum(t => t.Total);
                     return View("Index", vM);
-               
+                }
+
+                else
+                {
+                    DailyOrderVM vM = new DailyOrderVM()
+                    {
+                        Branches = _context.Branches.ToList(),
+                        Serchdate = date.Serchdate,
+                        Orders = _context.Orders.Include(b => b.Branch).
+                        Where(s => s.Status == 3 &&
+                        s.OrderDate.Date == date.Serchdate.Date &&
+                        s.Branch.Name == user.Branch)
+                        .OrderByDescending(o => o.OrderDate).ToList(),
+                    };
+                    ViewBag.total = vM.Orders.Sum(t => t.Total);
+                    return View("Index", vM);
+                }
             }
            
            

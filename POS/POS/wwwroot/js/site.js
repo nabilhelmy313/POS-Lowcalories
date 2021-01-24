@@ -114,6 +114,8 @@ con.on("message", function (message, date, branchId) {
         $(".mnote").html("unreads");
         $("#bran" + branchId).append("<h6 class='badge badge-info '>Unread Message</h6>")
     }
+    var aud = new Audio("/sharp-592.mp3")
+    aud.play();
 
 });
 con.start().catch(function (err) {

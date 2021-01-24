@@ -5,12 +5,15 @@
                 <form asp-action="SearchDate" method="get">
                     <div class="row m-0">
                         <div class="col-lg-12 p-0">
-                            <h3 class="text-gradient2"><label>Today's profits</label></h3>
+                            <h3 class="text-gradient2"><label>Today's profits</label> </h3>
                             <div class="row m-0">
-                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <div class="col-lg-2 col-md-3 col-sm-12 p-0">
                                     <input type="text" value="@(Math.Round(ViewBag.total, 2))" class="form-control search-slt total" disabled>
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                <div class="col-lg-2 col-md-3 col-sm-12 p-0">
+                                    <input type="text" placeholder="Customer Phone" asp-for="CustPhone" class="form-control search-slt " >
+                                </div>
+                                <div class="col-lg-2 col-md-3 col-sm-12 p-0">
                                     <input type="date" asp-for="Serchdate" class="form-control search-slt date">
                                 </div>
                                 @if (User.IsInRole("Admin"))
@@ -43,29 +46,31 @@
                     <th>ORDER NUMBER</th>
                     <th>ORDER TYPE</th>
                     <th>ORDER DATE</th>
-                    <th>Net</th>
-                    <th>Service</th>
-                    <th>Tax</th>
-                    <th>Discount</th>
+                    <th>CUSTOMER PHONE</th>
+                    <th>NET</th>
+                    <th>SERVICE</th>
+                    <th>TAX</th>
+                    <th>DISCOUT</th>
                     <th>TOTAL</th>
-                    <th>Details</th>
+                    <th>DETAILS</th>
                 </tr>
             </thead>
             <tbody class="text-muted print">
 
                 @foreach (var item in Model.Orders)
                 {
-                    <tr>
+                <tr>
                     <td data-label="Order Number">@item.Id</td>
                     <td data-label="Order Type">@item.Type</td>
                     <td data-label="Order date">@item.OrderDate</td>
+                    <td data-label="Order custphone">@item.CustPhone</td>
                     <td data-label="Order Net">@item.Net</td>
                     <td data-label="Order Service">@item.Service</td>
                     <td data-label="Order Tax">@item.Tax</td>
                     <td data-label="Order Discount">@item.Discount</td>
                     <td data-label="Order Total">@item.Total </td>
                     <td data-label="Details"><a asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle pointer"></i></a><br /></td>
-                    </tr>
+                </tr>
                 }
 
             </tbody>
