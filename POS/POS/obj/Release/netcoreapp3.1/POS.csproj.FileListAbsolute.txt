@@ -229,3 +229,4 @@ E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\POS.csproj.CopyComplet
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\POS.dll
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\POS.pdb
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\POS.genruntimeconfig.cache
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\Razor\Views\Message\Index.cshtml.g.cs

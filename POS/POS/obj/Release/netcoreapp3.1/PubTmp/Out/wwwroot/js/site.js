@@ -94,3 +94,59 @@ function calcTime() {
     })
 };
 calcTime();
+var con = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
+con.on("message", function (message, date, branchId) {
+
+    let branId = $(".branId").val();
+    if (branchId == branId) {
+        $(".mnote").empty();
+        $(".mnote").html("unreads");
+        let mes = `
+                             <div class="outgoing_msg">
+                                <div class="sent_msg">
+                                    <p>${message}</p>
+                                    <span class="time_date">${date}</span>
+                                </div>
+                              </div>`;
+        $(".msg_history").append(mes);
+    } else {
+        $(".mnote").empty();
+        $(".mnote").html("unreads");
+        $("#bran" + branchId).append("<h6 class='badge badge-info '>Unread Message</h6>")
+    }
+    var aud = new Audio("/sharp-592.mp3")
+    aud.play();
+
+});
+con.start().catch(function (err) {
+    return console.error(err.toString());
+});
+
+$(".done").click(function () {
+    let message = $(".text").val();
+    let branId = $(".branId").val();
+    let date = new Date().toLocaleString();
+    let mes = ` <div class="incoming_msg">
+
+                            <div class="received_msg">
+                                <div class="received_withd_msg">
+                                    <p>${message}</p>
+                                    <span class="time_date">${date}</span>
+                                </div>
+                            </div>
+                        </div>`;
+    $(".msg_history").append(mes);
+    $.ajax({
+        url: "/Message/SaveMessage",
+        data: { mm: message, bid: branId },
+        method: "POST",
+        success: function (data) {
+            console.log(data);
+
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+    $(".text").val("");
+});

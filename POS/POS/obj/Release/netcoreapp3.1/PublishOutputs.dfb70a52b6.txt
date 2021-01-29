@@ -195,6 +195,7 @@ E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\signalr.js\jquery.signalR.min.js
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\signalr\dist\browser\signalr.js
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\lib\signalr\dist\browser\signalr.min.js
+E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\sharp-592.mp3
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\appsettings.Development.json
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\appsettings.json
 E:\work\POS-Lowcalories\POS\POS\obj\Release\netcoreapp3.1\PubTmp\Out\libman.json
