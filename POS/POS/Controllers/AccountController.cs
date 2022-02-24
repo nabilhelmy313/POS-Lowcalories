@@ -26,6 +26,7 @@ namespace POS.Controllers
             this.roleManager = roleManager;
         }
         [Authorize(Roles ="Admin")]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             RegisterVM vM = new RegisterVM
@@ -36,6 +37,7 @@ namespace POS.Controllers
             return View(vM);
         }
         [Authorize(Roles ="Admin")]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {

@@ -70,7 +70,6 @@ namespace POS.Controllers
                         && s.OrderDate.Date == date.Serchdate.Date).
                         OrderByDescending(o => o.OrderDate).ToList(),
                     };
-                   
                     ViewBag.total = vM.Orders.Sum(t => t.Total);
                     return View("Index", vM);
                 }
